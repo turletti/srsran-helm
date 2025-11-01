@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "srsran-ue.fullname" . }}-ue-config
   labels:
-    app: {{ include "srsran-ue.name" . }}
+    {{- include "srsran-ue.labels" . | nindent 4 }}
 data:
   start_ue.sh: |
     #!/bin/bash

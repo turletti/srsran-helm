@@ -9,9 +9,9 @@ telegraf
 Standard labels
 */}}
 {{- define "telegraf.labels" -}}
-app.kubernetes.io/name: {{ include "telegraf.name" . }}
+app.kubernetes.io/name: {{ include "telegraf.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
+app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 app.kubernetes.io/managed-by: Helm
 {{- end }}
 

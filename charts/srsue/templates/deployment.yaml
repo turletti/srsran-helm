@@ -31,13 +31,14 @@ spec:
               mkdir -p /dev/net
               mknod /dev/net/tun c 10 200
               ip netns add ue0
+              apt update && apt install -y tmux iputils-ping iperf3
               while true; do sleep 30; done
           env:
             - name: PATH
               value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srsran/config"
           volumeMounts:
-            - mountPath: /srsran/config
-              name: ue-volume
+            - name: ue-config
+              mountPath: /srsran/config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       volumes:
@@ -45,6 +46,3 @@ spec:
           configMap:
             name: {{ include "srsran-ue.fullname" . }}-ue-config
             defaultMode: 0755
-      volumeMounts:
-        - name: ue-config
-          mountPath: /srsran/config
