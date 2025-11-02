@@ -33,7 +33,7 @@ jobs:
             CONTEXT: ./docker
             KEY: uhd
           - NAME: srsue
-            DOCKERFILE: ./docker/Dockerfile,srsUE
+            DOCKERFILE: ./docker/Dockerfile.srsUE
             CONTEXT: ./docker
             KEY: srsue
           - NAME: telegraf
