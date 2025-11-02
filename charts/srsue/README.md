@@ -4,4 +4,5 @@ Minimal Helm chart for deploying srsRAN UEs with ZMQ support.
 
 ## Usage
 ```bash
-helm install srsran-ue ./
+helm install srsran-ue ./ -n open5gs
+```

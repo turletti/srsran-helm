@@ -52,16 +52,16 @@ Deploy the Open5GS core following: https://github.com/yassir63/open5gs-k8s
 
 ### 3️⃣ Deploy the gNB, UE, and Telegraf
 
-Use Helm:
+Use [Helm](https://helm.sh/):
 
 ```bash
-helm install srsran-gnb charts/srsran-gnb/
+helm install srsran-gnb charts/srsran-gnb/ -n open5gs
 ```
 ```bash
-helm install srsran-ue charts/srsran-ue/
+helm install srsran-ue charts/srsran-ue/ -n open5gs
 ```
 ```bash
-helm install telegraf charts/telegraf/
+helm install telegraf charts/telegraf/ -n open5gs
 ```
 
 ### 4️⃣ Enable Monitoring

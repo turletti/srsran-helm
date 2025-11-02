@@ -4,4 +4,5 @@ Minimal Helm chart to deploy Telegraf for srsRAN gNB monitoring.
 
 ## Usage
 ```bash
-helm install telegraf ./
+helm install telegraf ./ -n open5gs
+```
