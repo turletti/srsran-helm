@@ -6,7 +6,7 @@ Helm chart for deploying the srsRAN gNB with ZMQ, UHD and DPDK support.
 
 Default ZMQ deployment:
 ```bash
-helm install srsran-gnb ./ -n open5gs
+helm install srsran-gnb ./ -n open5gs -f values-rfsim.yaml
 ```
 
 For other configurations, use `-f` with one of the following files:

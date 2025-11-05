@@ -55,7 +55,7 @@ Deploy the Open5GS core following: https://github.com/yassir63/open5gs-k8s
 Use [Helm](https://helm.sh/):
 
 ```bash
-helm install srsran-gnb charts/srsran-gnb/ -n open5gs
+helm install srsran-gnb charts/srsran-gnb/ -f charts/srsran-gnb/values-rfsim.yaml -n open5gs
 ```
 ```bash
 helm install srsran-ue charts/srsran-ue/ -n open5gs
