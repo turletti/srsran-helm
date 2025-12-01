@@ -37,7 +37,6 @@ gnbConfig:
             - plmn: "00101"
               tai_slice_support_list:
                 - sst: 1
-                  sd: 000001
                 - sst: 1
                   sd: 000002
 
@@ -71,11 +70,8 @@ gnbConfig:
     pusch:
       mcs_table: qam64                # Sets PUSCH MCS to 64 QAM
     slicing:
-      -
-        sst: 1
-        sd: 000001
-      -
-        sst: 1
+      - sst: 1
+      - sst: 1
         sd: 000002
 
   log:
