@@ -9,10 +9,10 @@
 #
 
 image:
-  repository: docker.io/r2labuser/srsran-gnb
-  #repository: ghcr.io/ziyad-mabrouk/srsran-gnb-uhd
-  tag: uhd4.8
-  #tag: v1.0
+  repository: ghcr.io/ziyad-mabrouk/srsran-gnb-uhd
+  tag: v1.0
+  #repository: docker.io/r2labuser/srsran-gnb
+  #tag: uhd4.8
 
 resources:
   define: false      # If false, no resources section is added
