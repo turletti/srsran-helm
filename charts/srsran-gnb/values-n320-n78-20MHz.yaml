@@ -1,5 +1,5 @@
 # =========================
-# gNB values file for UHD setup with USRP N300 -- n78 band
+# gNB values file for UHD setup with USRP N320 -- n78 band
 # =========================
 # recommended RF gain values for N300 on FR1
 # Avoid setting TX gain above ~30 dB on N3xx at FR1 frequencies to prevent excessive distortion.
@@ -55,7 +55,7 @@ gnbConfig:
 
   ru_sdr:
     device_driver: uhd                # The RF driver name.
-    device_args: addr=192.168.235.104,secondary_addr=192.168.235.103,name=ni-n3xx-31D98C7,product=n300,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000
+    device_args: addr=192.168.235.106,secondary_addr=192.168.235.105,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000
     srate: 61.44                      # RF sample rate might need to be adjusted according to selected bandwidth.
     clock: internal
     sync: internal                        
