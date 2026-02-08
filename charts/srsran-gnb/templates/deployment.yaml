@@ -65,6 +65,13 @@ spec:
       {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: gnb-volume
           configMap:
