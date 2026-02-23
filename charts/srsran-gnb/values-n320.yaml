@@ -1,27 +1,22 @@
 # =========================
 # gNB values file for UHD setup with USRP N320.
 # =========================
-
 image:
   repository: ghcr.io/ziyad-mabrouk/srsran-gnb-uhd
   tag: v1.0
   pullPolicy: IfNotPresent
-
 resources:
-  define: false      # If false, no resources section is added
+  define: false # If false, no resources section is added
   requests:
     cpu: "50m"
     memory: "3000Mi"
   limits:
     cpu: "5000m"
     memory: "3000Mi"
-
 start:
-  gnb: true          # If false, the gNB container will just sleep and not start srsRAN gNB
-  logs: true         # If false, the gnb-log container will not be deployed
-
+  gnb: true # If false, the gNB container will just sleep and not start srsRAN gNB
+  logs: true # If false, the gnb-log container will not be deployed
 gnbIp: 10.10.3.231
-
 gnbConfig:
   cu_cp:
     inactivity_timer: 7200
@@ -36,40 +31,39 @@ gnbConfig:
             - plmn: "00101"
               tai_slice_support_list:
                 - sst: 1
+                  sd: 0xFFFFFF
                 - sst: 1
-                  sd: "000002"
-
+                  sd: 0x100000
   ru_sdr:
-    device_driver: uhd                # The RF driver name.
-    device_args: addr=192.168.235.106,secondary_addr=192.168.235.105,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000
-    #device_args: addr=192.168.235.105,master_clock_rate=245.76e6 # USRP N200 IP address.
-    srate: 30.72                      # RF sample rate might need to be adjusted according to selected bandwidth.
-    clock: internal
-    sync: internal                        
-    tx_gain: 35                       # Transmit gain of the RF might need to adjusted to the given situation.
-    rx_gain: 40                       # Receive gain of the RF might need to adjusted to the given situation.
+    device_driver: uhd # The RF driver name.
+    device_args: addr=192.168.235.106 ,secondary_addr=192.168.235.106 ,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000
+    #device_args: addr=192.168.235.106 ,master_clock_rate=245.76e6 # USRP N200 IP address.
 
+    srate: 30.72 # RF sample rate might need to be adjusted according to selected bandwidth.
+    clock: internal
+    sync: internal
+    tx_gain: 35 # Transmit gain of the RF might need to adjusted to the given situation.
+    rx_gain: 40 # Receive gain of the RF might need to adjusted to the given situation.
   cell_cfg:
-    dl_arfcn: 628140                  # ARFCN of the downlink carrier (center frequency).
-    band: 78                           # The NR band.
-    channel_bandwidth_MHz: 20         # Bandwith in MHz. Number of PRBs will be automatically derived.
-    common_scs: 30                    # Subcarrier spacing in kHz used for data.
-    plmn: "00101"                     # PLMN broadcasted by the gNB.
-    tac: 1                            # Tracking area code (needs to match the core configuration).
+    dl_arfcn: 628140 # ARFCN of the downlink carrier (center frequency).
+    band: 78 # The NR band.
+    channel_bandwidth_MHz: 20 # Bandwith in MHz. Number of PRBs will be automatically derived.
+    common_scs: 30 # Subcarrier spacing in kHz used for data.
+    plmn: "00101" # PLMN broadcasted by the gNB.
+    tac: 1 # Tracking area code (needs to match the core configuration).
     pdsch:
-      mcs_table: qam64                # Sets PDSCH MCS to 64 QAM
+      mcs_table: qam64 # Sets PDSCH MCS to 64 QAM
     pusch:
-      mcs_table: qam64                # Sets PUSCH MCS to 64 QAM
+      mcs_table: qam64 # Sets PUSCH MCS to 64 QAM
     slicing:
       - sst: 1
+        sd: 0xFFFFFF
       - sst: 1
-        sd: "000002"
-
+        sd: 0x100000
   log:
     filename: /tmp/gnb.log
     all_level: warning
     config_level: debug
-
   metrics:
     enable_log: false
     autostart_stdout_metrics: true
@@ -79,20 +73,22 @@ gnbConfig:
       enable_e1ap: true
       enable_pdcp: true
       enable_sched: true
-      enable_rlc: true            
-      enable_mac: true            
+      enable_rlc: true
+      enable_mac: true
       enable_executor: true
       enable_du_low: true
       enable_ru: true
-
   pcap:
     mac_enable: false
     mac_filename: /tmp/gnb_mac.pcap
     ngap_enable: false
     ngap_filename: /tmp/gnb_ngap.pcap
-
   remote_control:
     bind_addr: 0.0.0.0
     enabled: true
-
     port: 8001
+# BEGIN ANSIBLE MANAGED NODE SELECTOR
+nodeSelector:
+  kubernetes.io/hostname: "sopnode-f3"
+nodeName: sopnode-f3
+# END ANSIBLE MANAGED NODE SELECTOR
