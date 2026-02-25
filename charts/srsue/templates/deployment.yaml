@@ -44,5 +44,5 @@ spec:
       volumes:
         - name: ue-config
           configMap:
-            name: {{ include "srsran-ue.fullname" . }}-ue-config
+            name: {{ include "srsran-ue.fullname" . }}-{{ .Release.Name }}-ue-config
             defaultMode: 0755
