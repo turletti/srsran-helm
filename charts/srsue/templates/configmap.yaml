@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "srsran-ue.fullname" . }}-ue-config
+  name: {{ include "srsran-ue.fullname" . }}-{{ .Release.Name }}-ue-config
   labels:
     {{- include "srsran-ue.labels" . | nindent 4 }}
 data:
