@@ -88,8 +88,10 @@ data:
         os.makedirs(output_directory, exist_ok=True)
 
         cfg = UE_TEMPLATE.format(
-            tx_port=f"tcp://{{ .Values.ueIp }}:{2100 + ue_number}",
-            rx_port=f"tcp://{{ .Values.ueIp }}:{2200 + ue_number}",
+            #tx_port=f"tcp://{{ .Values.ueIp }}:{2100 + ue_number}",
+            #rx_port=f"tcp://{{ .Values.ueIp }}:{2200 + ue_number}",
+            tx_port=f"tcp://{{ .Values.gnbIp }}:2001",
+            rx_port=f"tcp://{{ .Values.gnbIp }}:2000",
             log_file=os.path.join(output_directory, f"ue{ue_number}.log"),
             opc=OPC_HEX,
             k=K_HEX,
