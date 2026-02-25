@@ -55,7 +55,7 @@ gnbConfig:
 
   ru_sdr:
     device_driver: uhd                # The RF driver name.
-    device_args: mgmt_addr=192.168.235.106,addr=192.168.235.106,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000
+    device_args: addr=192.168.235.105,addr_mgmt=192.168.235.105,type=n3xx,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000,master_clock_rate=245.76e6
     srate: 61.44                      # RF sample rate might need to be adjusted according to selected bandwidth.
     clock: internal
     sync: internal                        
