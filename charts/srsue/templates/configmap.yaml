@@ -100,23 +100,20 @@ data:
             apn=apn_for(ue_number),
             netns=f"ue{ue_number}",
         )
-
     def generate_ue_config(ue_number: int, output_directory: str) -> str:
         os.makedirs(output_directory, exist_ok=True)
 
         cfg = UE_TEMPLATE.format(
-            #tx_port=f"tcp://{{ .Values.ueIp }}:{2100 + ue_number}",
-            #rx_port=f"tcp://{{ .Values.ueIp }}:{2200 + ue_number}",
-            tx_port=f"tcp://{{ .Values.gnbIp }}:2001",
-            rx_port=f"tcp://{{ .Values.gnbIp }}:2000",
+            # Utilisation des valeurs injectées par Helm/Ansible
+            tx_port=f"tcp://{{ .Values.ueIp }}:{{ .Values.zmq.tx_port }}",
+            rx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.rx_port }}",
             log_file=os.path.join(output_directory, f"ue{ue_number}.log"),
-            opc=OPC_HEX,
-            k=K_HEX,
-            imsi=imsi_for(ue_number),
-            apn=apn_for(ue_number),
+            opc="{{ .Values.opc }}",
+            k="{{ .Values.k }}",
+            imsi="{{ .Values.imsi }}",
+            apn="{{ .Values.apn }}",
             netns=f"ue{ue_number}",
         )
-
         path = os.path.join(output_directory, f"ue_{ue_number}.conf")
         with open(path, "w") as f:
             f.write(cfg)
