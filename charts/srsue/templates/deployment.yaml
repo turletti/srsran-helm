@@ -29,10 +29,9 @@ spec:
           args:
             - |
               mkdir -p /dev/net
-              mknod /dev/net/tun c 10 200
-              ip netns add ue0
-              apt update && apt install -y tmux iputils-ping iperf3
-              while true; do sleep 30; done
+              if [ ! -c /dev/net/tun ]; then mknod /dev/net/tun c 10 200; fi
+              apt update && apt install -y iputils-ping iperf3 tmux
+              /bin/bash /srsran/config/start_ue.sh 1
           env:
             - name: PATH
               value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srsran/config"
