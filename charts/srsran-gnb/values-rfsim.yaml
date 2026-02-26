@@ -41,7 +41,8 @@ gnbConfig:
 
   ru_sdr:
     device_driver: zmq                # The RF driver name.
-    device_args: tx_port=tcp://10.10.3.231:2000,rx_port=tcp://10.10.3.232:2001,base_srate=23.04e6 
+    device_args: >-
+      tx_port=tcp://10.10.3.231:2000,tx_port1=tcp://10.10.3.231:2001,tx_port2=tcp://10.10.3.231:2002,rx_port=tcp://10.10.3.232:2100,rx_port1=tcp://10.10.3.232:2200,rx_port2=tcp://10.10.3.232:2300,base_srate=23.04e6
     srate: 23.04                      # RF sample rate might need to be adjusted according to selected bandwidth.
     tx_gain: 75                       # Transmit gain of the RF might need to adjusted to the given situation.
     rx_gain: 75                       # Receive gain of the RF might need to adjusted to the given situation.
