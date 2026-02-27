@@ -7,8 +7,6 @@ metadata:
 data:
   start_ue.sh: |
     #!/bin/bash
-    # Redirect all stdout and stderr to the container's main log (process 1)
-    exec > /proc/1/fd/1 2>&1
 
     echo "--- Starting UE Configuration Script ---"
 
@@ -17,7 +15,7 @@ data:
 
     # 2. Start srsUE in the background
     echo "Starting srsUE process..."
-    /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf &
+    /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf > /proc/1/fd/1 2>&1 &
     UE_PID=$!
 
     # 3. Wait for the tun_srsue interface to be created and assigned an IP
