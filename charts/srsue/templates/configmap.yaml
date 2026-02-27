@@ -7,18 +7,21 @@ metadata:
 data:
   start_ue.sh: |
     #!/bin/bash
-    # Génère la conf et lance l'UE dans le namespace du Pod
-    python3 /srsran/config/generate_ue_conf.py $1 /tmp/
-    /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf
-    #!/bin/bash
+    # Redirect all stdout and stderr to the container's main log (process 1)
+    exec > /proc/1/fd/1 2>&1
+
+    echo "--- Starting UE Configuration Script ---"
+
     # 1. Generate the configuration file using the Python script
     python3 /srsran/config/generate_ue_conf.py $1 /tmp/
 
     # 2. Start srsUE in the background
+    echo "Starting srsUE process..."
     /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf &
     UE_PID=$!
 
     # 3. Wait for the tun_srsue interface to be created and assigned an IP
+    # Timeout is set to 100 seconds (50 iterations * 2s)
     echo "Waiting for tun_srsue interface to come up..."
     for i in {1..50}; do
       if ip addr show tun_srsue > /dev/null 2>&1; then
@@ -27,19 +30,28 @@ data:
           echo "✅ Interface tun_srsue is UP with IP: $UE_IP"
           
           # --- APPLY NETWORK SETTINGS ---
-          
-          # Set MTU to 1400 to avoid fragmentation
+          echo "Applying network configuration changes..."
+
+          # Set MTU to 1400 to avoid fragmentation (standard for 5G tunnels)
           ip link set dev tun_srsue mtu 1400
-          echo "MTU set to 1400"
+          echo "Current MTU: $(cat /sys/class/net/tun_srsue/mtu)"
+
+          # Change routes from /24 to /16 to broaden the reach
+          # We check if the /24 route exists before deleting and replacing it
           if ip route show 12.1.0.0/24 dev tun_srsue > /dev/null 2>&1; then
             ip route del 12.1.0.0/24 dev tun_srsue
             ip route add 12.1.0.0/16 dev tun_srsue
+            echo "Route 12.1.0.0 modified to /16"
           fi
+
           if ip route show 14.1.0.0/24 dev tun_srsue > /dev/null 2>&1; then
             ip route del 14.1.0.0/24 dev tun_srsue
             ip route add 14.1.0.0/16 dev tun_srsue
+            echo "Route 14.1.0.0 modified to /16"
           fi
-          echo "Network configuration applied successfully."
+
+          echo "--- Final Routing Table ---"
+          ip route
           break
         fi
       fi
@@ -98,7 +110,7 @@ data:
     apn_protocol = ipv4
 
     [gw]
-    # netns supprimé pour que l'interface tun apparaisse dans le pod
+    # netns removed so the tun interface appears in the pod's network namespace
     ip_devname = tun_srsue
     ip_netmask = 255.255.255.0
 
@@ -108,8 +120,7 @@ data:
 
     def generate_ue_config(ue_number: int, output_directory: str) -> str:
         os.makedirs(output_directory, exist_ok=True)
-
-        # Les valeurs entre double accolades sont injectées par Helm au déploiement
+        # Values are injected by Helm during deployment
         cfg = UE_TEMPLATE.format(
             tx_port=f"tcp://{{ .Values.ueIp }}:{{ .Values.zmq.tx_port }}",
             rx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.rx_port }}",
@@ -119,7 +130,6 @@ data:
             imsi="{{ .Values.imsi }}",
             apn="{{ .Values.apn }}",
         )
-        
         path = os.path.join(output_directory, f"ue_{ue_number}.conf")
         with open(path, "w") as f:
             f.write(cfg)
