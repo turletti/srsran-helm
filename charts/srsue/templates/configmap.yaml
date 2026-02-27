@@ -39,7 +39,7 @@ data:
             ip route del 14.1.0.0/24 dev tun_srsue
             ip route add 14.1.0.0/16 dev tun_srsue
           fi
-  	  echo "Network configuration applied successfully."
+          echo "Network configuration applied successfully."
           break
         fi
       fi
