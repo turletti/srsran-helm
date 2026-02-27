@@ -63,6 +63,7 @@ data:
     # netns supprimé pour que l'interface tun apparaisse dans le pod
     ip_devname = tun_srsue
     ip_netmask = 255.255.255.0
+    mtu = 1400
 
     [gui]
     enable = false
