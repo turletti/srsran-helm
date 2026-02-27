@@ -10,6 +10,44 @@ data:
     # Génère la conf et lance l'UE dans le namespace du Pod
     python3 /srsran/config/generate_ue_conf.py $1 /tmp/
     /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf
+    #!/bin/bash
+    # 1. Generate the configuration file using the Python script
+    python3 /srsran/config/generate_ue_conf.py $1 /tmp/
+
+    # 2. Start srsUE in the background
+    /opt/srsRAN_4G/build/srsue/src/srsue /tmp/ue_$1.conf &
+    UE_PID=$!
+
+    # 3. Wait for the tun_srsue interface to be created and assigned an IP
+    echo "Waiting for tun_srsue interface to come up..."
+    for i in {1..50}; do
+      if ip addr show tun_srsue > /dev/null 2>&1; then
+        UE_IP=$(ip addr show tun_srsue | grep 'inet ' | awk '{print $2}')
+        if [ ! -z "$UE_IP" ]; then
+          echo "✅ Interface tun_srsue is UP with IP: $UE_IP"
+          
+          # --- APPLY NETWORK SETTINGS ---
+          
+          # Set MTU to 1400 to avoid fragmentation
+          ip link set dev tun_srsue mtu 1400
+          echo "MTU set to 1400"
+          if ip route show 12.1.0.0/24 dev tun_srsue > /dev/null 2>&1; then
+            ip route del 12.1.0.0/24 dev tun_srsue
+            ip route add 12.1.0.0/16 dev tun_srsue
+          fi
+          if ip route show 14.1.0.0/24 dev tun_srsue > /dev/null 2>&1; then
+            ip route del 14.1.0.0/24 dev tun_srsue
+            ip route add 14.1.0.0/16 dev tun_srsue
+          fi
+  	  echo "Network configuration applied successfully."
+          break
+        fi
+      fi
+      sleep 2
+    done
+
+    # Maintain the container alive as long as srsUE is running
+    wait $UE_PID
 
   generate_ue_conf.py: |
     #!/usr/bin/env python3

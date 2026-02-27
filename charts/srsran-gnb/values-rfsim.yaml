@@ -54,6 +54,8 @@ gnbConfig:
     common_scs: 15                    # Subcarrier spacing in kHz used for data.
     plmn: "00101"                     # PLMN broadcasted by the gNB.
     tac: 1                            # Tracking area code (needs to match the core configuration).
+    nof_antennas_tx: 3                # important to enable 3 srsues
+    nof_antennas_rx: 3                # important to enable 3 srsues
     pdcch:
       common:
         ss0_index: 0                  # Set search space zero index to match srsUE capabilities
