@@ -40,6 +40,9 @@ spec:
               mountPath: /srsran/config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- end }}
       volumes:
         - name: ue-config
           configMap:
