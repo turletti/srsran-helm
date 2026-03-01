@@ -120,8 +120,8 @@ data:
         os.makedirs(output_directory, exist_ok=True)
         # Values are injected by Helm during deployment
         cfg = UE_TEMPLATE.format(
-            tx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.tx_port }}",
-            rx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.rx_port }}",
+            tx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.tx_port }},bind=false",
+            rx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.rx_port }},bind=false",
             log_file=os.path.join(output_directory, f"ue{ue_number}.log"),
             opc="{{ .Values.opc }}",
             k="{{ .Values.k }}",
