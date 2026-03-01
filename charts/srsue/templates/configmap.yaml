@@ -72,7 +72,7 @@ data:
     nof_antennas = 1
 
     device_name = zmq
-    device_args = tx_port={tx_port},rx_port={rx_port},id={{ .Values.imsi }},base_srate=23.04e6
+    device_args = tx_port={tx_port},rx_port={rx_port},tx_type={tx_type},rx_type={rx_type},id={{ .Values.imsi }},base_srate=23.04e6
 
     [rat.eutra]
     dl_earfcn = 2850
@@ -122,6 +122,8 @@ data:
         cfg = UE_TEMPLATE.format(
             tx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.tx_port }}",
             rx_port=f"tcp://{{ .Values.gnbIp }}:{{ .Values.zmq.rx_port }}",
+            tx_type="pub",
+            rx_type="sub",
             log_file=os.path.join(output_directory, f"ue{ue_number}.log"),
             opc="{{ .Values.opc }}",
             k="{{ .Values.k }}",
