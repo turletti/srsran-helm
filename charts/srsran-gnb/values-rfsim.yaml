@@ -75,7 +75,7 @@ gnbConfig:
         sd: "000002"
 
   log:
-    filename: /tmp/gnb.log
+    filename: /var/log/gnb.log
     all_level: warning
     config_level: debug
 
