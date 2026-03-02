@@ -1,0 +1,15 @@
+image:
+  repository: docker.io/r2labuser/srsran-broker
+  #repository: ghcr.io/ziyad-mabrouk/zmq-broker
+  #tag: v1.0
+  tag: latest
+  pullPolicy: IfNotPresent
+
+brokerIp: ""
+nodeName: ""
+
+gnb:
+  dl_port: 2000
+  ul_port: 2001
+
+ues: []
