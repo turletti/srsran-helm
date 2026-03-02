@@ -3,13 +3,9 @@
 # =========================
 
 image:
-  repository: docker.io/r2labuser/srsue
-  #repository: ghcr.io/ziyad-mabrouk/srsue
-  #tag: v1.0
-  tag: latest
+  repository: ghcr.io/ziyad-mabrouk/srsue
+  tag: v1.0
   pullPolicy: IfNotPresent
 
-# injected by ansible
-gnbIp: ""
-ueIp: ""
-
+ueIp: 10.10.3.232
+gnbIp: 10.10.3.231

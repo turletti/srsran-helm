@@ -1,4 +1,0 @@
-FROM python:3.11-slim
-RUN pip install pyzmq
-COPY resources/broker.py /broker.py
-CMD ["python3", "/broker.py"]
