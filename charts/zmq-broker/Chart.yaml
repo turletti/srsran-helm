@@ -1,0 +1,6 @@
+apiVersion: v2
+name: zmq-broker
+description: ZMQ broker for multi-UE srsRAN (REQ/REP UL + PUB/SUB DL)
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
