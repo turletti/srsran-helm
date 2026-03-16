@@ -22,11 +22,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/bash", "-c"]
           args:
-          {{- if .Values.start.gnb }}
-            - /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
-          {{- else }}
-            - sleep infinity
-          {{- end }}
+            - |
+              ip route del default dev n3 || true
+              {{- if .Values.start.gnb }}
+                /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
+              {{- else }}
+                sleep infinity
+              {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.gnbConfig.remote_control.port }}
