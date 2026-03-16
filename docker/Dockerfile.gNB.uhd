@@ -75,6 +75,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libyaml-cpp-dev \
     libgtest-dev \
     cpufrequtils \
+    iproute2 iputils-ping tcpdump \
     inetutils-tools \
     libboost-all-dev \
     libncurses5-dev \
@@ -92,7 +93,7 @@ ARG UHD_VERSION
 
 COPY --from=builder /opt/uhd/${UHD_VERSION} /opt/uhd/${UHD_VERSION}
 
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/uhd/${UHD_VERSION}/lib/:/opt/uhd/${UHD_VERSION}/lib/x86_64-linux-gnu/:/opt/uhd/${UHD_VERSION}/lib/aarch64-linux-gnu/
+ENV LD_LIBRARY_PATH=/usr/local/bin:/opt/uhd/${UHD_VERSION}/lib/:/opt/uhd/${UHD_VERSION}/lib/x86_64-linux-gnu/:/opt/uhd/${UHD_VERSION}/lib/aarch64-linux-gnu/
 
 ENV PATH=$PATH:/opt/uhd/${UHD_VERSION}/bin/
 
