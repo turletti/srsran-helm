@@ -23,6 +23,7 @@ spec:
           command: ["/bin/bash", "-c"]
           args:
             - |
+              apt-get update && apt-get install -y iproute2 net-tools || true
               ip route del default dev n3 || true
               {{- if .Values.start.gnb }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
