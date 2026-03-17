@@ -9,7 +9,7 @@
 #
 
 image:
-  repository: r2labuser/srsran-gnb-uhd
+  repository: r2labuser/srsran-gnb-uhd # this image includes iproute2/ping/tcpdump
   #repository: ghcr.io/ziyad-mabrouk/srsran-gnb-uhd
   tag: v1.0
   #repository: docker.io/r2labuser/srsran-gnb
