@@ -120,5 +120,7 @@ gnbConfig:
 
     port: 8001
 
-
-
+# multus interface to reach USRP. use true to create it.
+usrp: true
+usrpPodIp: 192.168.235.240
+namespace: free5gc
