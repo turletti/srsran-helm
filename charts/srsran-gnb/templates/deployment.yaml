@@ -29,10 +29,10 @@ spec:
           command: ["/bin/bash", "-c"]
           args:
             - |
+              ip route del default dev n3 || true
               {{- if .Values.usrp }}
               ip route add 192.168.235.0/24 dev usrp1 || true
               {{- end }}
-              ip route del default dev n3 || true
               {{- if .Values.start.gnb }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
               {{- else }}
