@@ -16,7 +16,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: |
           [
-            { "name": "n3network", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
+            { "name": "{{ .Values.n3networkName }}", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
             {{- if .Values.usrp }},
             { "name": "usrp-network", "interface": "usrp1", "ips": [ "{{ .Values.usrpPodIp }}/24" ] }
             {{- end }}
