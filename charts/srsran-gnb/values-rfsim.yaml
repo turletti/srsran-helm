@@ -106,3 +106,6 @@ gnbConfig:
     enabled: true
 
     port: 8001
+
+# multus interface to reach USRP. use true to create it.
+usrp: false
