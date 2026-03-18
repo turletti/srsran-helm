@@ -3,7 +3,8 @@
 # =========================
 
 image:
-  repository: ghcr.io/ziyad-mabrouk/srsran-gnb-zmq
+  repository: docker.io/r2labuser/srsran-gnb-zmq # with iproute/ping/tcpdump
+  #repository: ghcr.io/ziyad-mabrouk/srsran-gnb-zmq
   tag: v1.0
   pullPolicy: IfNotPresent
 
