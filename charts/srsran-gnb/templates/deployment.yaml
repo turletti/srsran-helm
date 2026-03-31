@@ -27,6 +27,23 @@ spec:
     spec:
       containers:
         - name: gnb
+          {{- if .Values.sriov }}
+          resources:
+            requests:
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
+            limits:
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
+          {{- else if .Values.resources.define }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
+              cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
+              hugepages-1Gi: "2Gi"
+            limits:
+              memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
+              cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
+              hugepages-1Gi: "2Gi"
+          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/bash", "-c"]
@@ -50,15 +67,6 @@ spec:
             capabilities:
               add: ["NET_ADMIN"]
             privileged: true
-          resources:
-            requests:
-              memory: "4Gi"
-              cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
-              hugepages-1Gi: "2Gi"
-            limits:
-              memory: "4Gi"
-              cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
-              hugepages-1Gi: "2Gi"
           lifecycle:
             preStop:
               exec:
@@ -68,13 +76,10 @@ spec:
               name: gnb-volume
             - mountPath: /var/log/
               name: varlog
-            - mountPath: /mnt/
-              name: host-mount
+            - name: host-mount
+              mountPath: /mnt/
             - mountPath: /dev/hugepages
               name: hugepages
-          {{- if .Values.resources.define}}
-          # ressources TCPDump existantes, déjà intégrées
-          {{- end}}
         {{- if .Values.start.logs }}
         - name: gnb-logs
           image: busybox
