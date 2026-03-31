@@ -50,10 +50,12 @@ spec:
               ip route del default dev n3 || true
               {{- if .Values.sriov }}
               for i in {1..30}; do
-                ip link set dev ru mtu {{ .Values.sriov.ruMtu }} 2>/dev/null && \
-                ip addr add {{ .Values.sriov.ruIp }}/24 dev ru 2>/dev/null && break
+                echo "Attempt $i to configure ru"
+                ip link set dev ru mtu {{ .Values.sriov.ruMtu }} && \
+                ip addr add {{ .Values.sriov.ruIp }}/24 dev ru && break
                 sleep 1
               done
+              ip addr show ru
               {{- end }}
               {{- if .Values.ru }}
               ip route add {{ .Values.ruSubnet }} dev ru1 || true
