@@ -21,12 +21,19 @@ spec:
             { "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
             {{- end }}
             {{- if .Values.sriov }},
-            { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}", "mac": "{{ .Values.sriov.mac }}", "pciAddress": "{{ .Values.sriov.pciAddress }}" }
+            { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}" }
             {{- end }}
           ]
     spec:
       containers:
         - name: gnb
+          {{- if .Values.sriov }}
+          resources:
+            requests:
+              {{ .Values.sriov.sriovResourceName }}: 1
+            limits:
+              {{ .Values.sriov.sriovResourceName }}: 1
+          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/bash", "-c"]
