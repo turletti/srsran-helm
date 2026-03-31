@@ -138,4 +138,5 @@ gnbConfig:
 
 # multus interface to reach RU. use true to create it.
 ru: true
+ruSubnet: 192.168.233.0/24
 ruPodIp: 192.168.233.240
