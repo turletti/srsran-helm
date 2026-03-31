@@ -31,7 +31,7 @@ spec:
             - |
               ip route del default dev n3 || true
               {{- if .Values.ru }}
-              ip route add 192.168.235.0/24 dev ru1 || true
+              ip route add {{ .Values.ruSubnet }} dev ru1 || true
               {{- end }}
               {{- if .Values.start.gnb }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
