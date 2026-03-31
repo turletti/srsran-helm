@@ -140,6 +140,7 @@ sriov:
   name: "ru"
   type: sriov
   mac: "00:11:22:33:44:66"
+  deviceID: "0"  # use virtfn0
   sriovNetworkNamespace: "sriov-network-operator"
   sriovResourceName: "ruvfiou"
   vlan: 801
