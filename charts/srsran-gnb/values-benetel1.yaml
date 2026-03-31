@@ -135,3 +135,12 @@ gnbConfig:
     enabled: true
 
     port: 8001
+
+sriov:
+  name: "ru"
+  type: sriov
+  mac: "00:11:22:33:44:66"
+  sriovNetworkNamespace: "sriov-network-operator"
+  sriovResourceName: "ruvfiou"
+  vlan: 801
+

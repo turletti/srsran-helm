@@ -1,0 +1,14 @@
+{{- if .Values.sriov }}
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  name: sriov-network
+  namespace: {{ .Values.sriov.sriovNetworkNamespace }}
+spec:
+  networkNamespace: {{ .Values.namespace }}
+  resourceName: {{ .Values.sriov.sriovResourceName }}
+  vlan: {{ .Values.sriov.vlan }}
+  spoofChk: "off"
+  trust: "on"
+  capabilities: '{ "mac": true }'
+{{- end }}
