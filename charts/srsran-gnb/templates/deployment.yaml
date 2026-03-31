@@ -21,7 +21,7 @@ spec:
             { "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
             {{- end }}
             {{- if .Values.sriov }},
-            { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}", "mac": "{{ .Values.sriov.mac }}", "deviceID": "{{ .Values.sriov.pciBusID }}" }
+            { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}", "mac": "{{ .Values.sriov.mac }}", "pci": "{{ .Values.sriov.pciBusID }}" }
             {{- end }}
           ]
     spec:
