@@ -38,9 +38,11 @@ spec:
             requests:
               memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
               cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
+              hugepages-1Gi: {{ .Values.resources.requests.hugepages-1Gi | quote }}
             limits:
               memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
               cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
+              hugepages-1Gi: {{ .Values.resources.limits.hugepages-1Gi | quote }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
