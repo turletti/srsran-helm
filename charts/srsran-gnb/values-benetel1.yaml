@@ -145,4 +145,4 @@ sriov:
   sriovResourceName: "ruvfiou"
   vlan: 801
   ruIp: "192.168.233.199"
-
+  ruMtu: 9000
