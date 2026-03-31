@@ -17,7 +17,7 @@ gnbIp: 10.10.3.231
 
 gnbConfig:
   hal:
-    eal_args: "--lcores (0-1)@(0-23) -a 0000:3a:09.3"
+    eal_args: "--lcores (0-1)@(0-23)"
   cu_cp:
     inactivity_timer: 7200
     request_pdu_session_timeout: 30

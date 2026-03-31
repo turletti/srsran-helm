@@ -30,6 +30,16 @@ spec:
           args:
             - |
               ip route del default dev n3 || true
+              {{- if .Values.sriov }}
+              for i in {1..30}; do
+                PCI_ADDR=$(cat /sys/class/net/ru/device/uevent 2>/dev/null | grep PCI_SLOT_NAME | cut -d= -f2)
+                if [ -n "$PCI_ADDR" ]; then
+                  break
+                fi
+                sleep 1
+              done
+              echo "Detected PCI address: $PCI_ADDR"
+              {{- end }}
               {{- if .Values.start.gnb }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
               {{- else }}
