@@ -47,6 +47,17 @@ spec:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "rm -rf /mnt/*_log.txt"]
+          {{- if .Values.sriov }}
+          resources:
+            requests:
+              memory: "4Gi"
+              hugepages-1Gi: "2Gi"
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+            limits:
+              memory: "4Gi"
+              hugepages-1Gi: "2Gi"
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+          {{- else }}
           resources:
             requests:
               memory: "4Gi"
@@ -54,12 +65,7 @@ spec:
             limits:
               memory: "4Gi"
               hugepages-1Gi: "2Gi"
-            {{- if .Values.sriov }}
-            requests:
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
-            limits:
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
-            {{- end }}
+          {{- end }}
           volumeMounts:
             - mountPath: /srsran/config
               name: gnb-volume
