@@ -17,9 +17,6 @@ spec:
         k8s.v1.cni.cncf.io/networks: |
           [
             { "name": "{{ .Values.n3networkName }}", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
-            {{- if .Values.ru }},
-            { "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
-            {{- end }}
             {{- if .Values.sriov }},
             { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}" }
             {{- end }}
@@ -27,34 +24,13 @@ spec:
     spec:
       containers:
         - name: gnb
-          {{- if .Values.sriov }}
-          resources:
-            requests:
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
-            limits:
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
-          {{- else if .Values.resources.define }}
-          resources:
-            requests:
-              memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
-              cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
-              hugepages-1Gi: {{ .Values.resources.requests.hugepages-1Gi | quote }}
-            limits:
-              memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
-              cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
-              hugepages-1Gi: {{ .Values.resources.limits.hugepages-1Gi | quote }}
-          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/bash", "-c"]
           args:
             - |
               ip route del default dev n3 || true
-              {{- if .Values.ru }}
-              ip route add {{ .Values.ruSubnet }} dev ru1 || true
-              {{- end }}
               {{- if .Values.start.gnb }}
-                echo "About to start gNB"
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
               {{- else }}
                 sleep infinity
@@ -65,12 +41,25 @@ spec:
               protocol: TCP
           securityContext:
             capabilities:
-              add: ["NET_ADMIN"]
+              add: ["NET_ADMIN", "SYS_NICE"]
             privileged: true
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "rm -rf /mnt/*_log.txt"]
+          resources:
+            requests:
+              memory: "4Gi"
+              hugepages-1Gi: "2Gi"
+            limits:
+              memory: "4Gi"
+              hugepages-1Gi: "2Gi"
+            {{- if .Values.sriov }}
+            requests:
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+            limits:
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+            {{- end }}
           volumeMounts:
             - mountPath: /srsran/config
               name: gnb-volume
@@ -80,14 +69,14 @@ spec:
               mountPath: /mnt/
             - mountPath: /dev/hugepages
               name: hugepages
-        {{- if .Values.start.logs }}
+          {{- if .Values.start.logs }}
         - name: gnb-logs
           image: busybox
           args: [/bin/sh, -c, 'while ! tail -f /var/log/gnb.log 2>/dev/null; do sleep 1 ; done']
           volumeMounts:
             - mountPath: /var/log/
               name: varlog
-        {{- end }}
+          {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       {{- if .Values.nodeName }}
