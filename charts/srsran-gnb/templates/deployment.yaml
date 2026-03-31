@@ -48,15 +48,6 @@ spec:
           args:
             - |
               ip route del default dev n3 || true
-              {{- if .Values.sriov }}
-              for i in {1..30}; do
-                if ip link set dev ru down 2>/dev/null && \
-                   ip link set dev ru up 2>/dev/null; then
-                  break
-                fi
-                sleep 1
-              done
-              {{- end }}
               {{- if .Values.ru }}
               ip route add {{ .Values.ruSubnet }} dev ru1 || true
               {{- end }}
