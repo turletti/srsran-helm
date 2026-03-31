@@ -12,8 +12,14 @@ image:
 resources:
   define: true
   requests:
+    tcpdump:
+      memory: "512Mi"
+      cpu: "1"
     hugepages-1Gi: "2Gi"
   limits:
+    tcpdump:
+      memory: "512Mi"
+      cpu: "1"
     hugepages-1Gi: "2Gi"
 
 start:
