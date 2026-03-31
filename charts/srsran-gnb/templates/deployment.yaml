@@ -36,13 +36,25 @@ spec:
           {{- else if .Values.resources.define }}
           resources:
             requests:
-              memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
-              cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
-              hugepages-1Gi: "2Gi"
+              {{- if .Values.resources.requests.memory }}
+              memory: {{ .Values.resources.requests.memory | quote }}
+              {{- end }}
+              {{- if .Values.resources.requests.cpu }}
+              cpu: {{ .Values.resources.requests.cpu | quote }}
+              {{- end }}
+              {{- if .Values.resources.requests.hugepages-1Gi }}
+              hugepages-1Gi: {{ .Values.resources.requests.hugepages-1Gi | quote }}
+              {{- end }}
             limits:
-              memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
-              cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
-              hugepages-1Gi: "2Gi"
+              {{- if .Values.resources.limits.memory }}
+              memory: {{ .Values.resources.limits.memory | quote }}
+              {{- end }}
+              {{- if .Values.resources.limits.cpu }}
+              cpu: {{ .Values.resources.limits.cpu | quote }}
+              {{- end }}
+              {{- if .Values.resources.limits.hugepages-1Gi }}
+              hugepages-1Gi: {{ .Values.resources.limits.hugepages-1Gi | quote }}
+              {{- end }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
