@@ -39,6 +39,7 @@ spec:
                 sleep 1
               done
               echo "Detected PCI address: $PCI_ADDR"
+              sed -i "s|0000:3a:09.[0-3]|$PCI_ADDR|g" /srsran/config/srsran-gnb.yaml
               {{- end }}
               {{- if .Values.start.gnb }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
