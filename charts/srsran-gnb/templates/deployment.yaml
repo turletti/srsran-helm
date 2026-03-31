@@ -39,10 +39,15 @@ spec:
                 sleep 1
               done
               echo "Detected PCI address: $PCI_ADDR"
-              sed -i "s|0000:3a:09.[0-3]|$PCI_ADDR|g" /srsran/config/srsran-gnb.yaml
+              cp /srsran/config/srsran-gnb.yaml /tmp/srsran-gnb.yaml
+              sed -i "s|0000:3a:09.[0-3]|$PCI_ADDR|g" /tmp/srsran-gnb.yaml
               {{- end }}
               {{- if .Values.start.gnb }}
+                {{- if .Values.sriov }}
+                /usr/local/bin/gnb -c /tmp/srsran-gnb.yaml
+                {{- else }}
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
+                {{- end }}
               {{- else }}
                 sleep infinity
               {{- end }}
