@@ -30,9 +30,17 @@ spec:
           {{- if .Values.sriov }}
           resources:
             requests:
-              {{ .Values.sriov.sriovResourceName }}: 1
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
             limits:
-              {{ .Values.sriov.sriovResourceName }}: 1
+              openshift.io/{{ .Values.sriov.sriovResourceName }}: 1
+          {{- else if .Values.resources.define }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
+              cpu: {{ .Values.resources.requests.tcpdump.cpu | quote }}
+            limits:
+              memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
+              cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
