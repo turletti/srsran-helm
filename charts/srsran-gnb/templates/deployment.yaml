@@ -49,9 +49,11 @@ spec:
             - |
               ip route del default dev n3 || true
               {{- if .Values.sriov }}
-              sleep 5
-              ip link set dev ru mtu {{ .Values.sriov.ruMtu }} || true
-              ip addr add {{ .Values.sriov.ruIp }}/24 dev ru || true
+              for i in {1..30}; do
+                ip link set dev ru mtu {{ .Values.sriov.ruMtu }} 2>/dev/null && \
+                ip addr add {{ .Values.sriov.ruIp }}/24 dev ru 2>/dev/null && break
+                sleep 1
+              done
               {{- end }}
               {{- if .Values.ru }}
               ip route add {{ .Values.ruSubnet }} dev ru1 || true
