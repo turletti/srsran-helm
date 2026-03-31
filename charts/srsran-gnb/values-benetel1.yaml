@@ -135,3 +135,7 @@ gnbConfig:
     enabled: true
 
     port: 8001
+
+# multus interface to reach RU. use true to create it.
+ru: true
+ruPodIp: 192.168.233.240

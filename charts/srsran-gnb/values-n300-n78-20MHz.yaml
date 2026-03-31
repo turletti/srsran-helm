@@ -121,6 +121,6 @@ gnbConfig:
 
     port: 8001
 
-# multus interface to reach USRP. use true to create it.
-usrp: true
-usrpPodIp: 192.168.235.240
+# multus interface to reach RU. use true to create it.
+ru: true
+ruPodIp: 192.168.235.240
