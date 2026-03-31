@@ -48,6 +48,9 @@ spec:
           args:
             - |
               ip route del default dev n3 || true
+              {{- if .Values.sriov }}
+              ip addr add {{ .Values.sriov.ruIp }}/24 dev ru || true
+              {{- end }}
               {{- if .Values.ru }}
               ip route add {{ .Values.ruSubnet }} dev ru1 || true
               {{- end }}

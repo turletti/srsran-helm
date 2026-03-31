@@ -144,4 +144,5 @@ sriov:
   sriovNetworkNamespace: "sriov-network-operator"
   sriovResourceName: "ruvfiou"
   vlan: 801
+  ruIp: "192.168.233.199"
 
