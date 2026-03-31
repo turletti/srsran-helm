@@ -61,6 +61,7 @@ spec:
               ip route add {{ .Values.ruSubnet }} dev ru1 || true
               {{- end }}
               {{- if .Values.start.gnb }}
+                echo "About to start gNB"
                 /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
               {{- else }}
                 sleep infinity
