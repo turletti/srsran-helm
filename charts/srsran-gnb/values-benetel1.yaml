@@ -9,19 +9,12 @@ image:
   tag: v1.0
   pullPolicy: IfNotPresent
 
-
 resources:
   define: true
   requests:
-    tcpdump:
-      memory: "4Gi"
-      cpu: "2"
-      hugepages-1Gi: "2Gi"
+    hugepages-1Gi: "2Gi"
   limits:
-    tcpdump:
-      memory: "4Gi"
-      cpu: "2"
-      hugepages-1Gi: "2Gi"
+    hugepages-1Gi: "2Gi"
 
 start:
   gnb: true          # If false, the gNB container will just sleep and not start srsRAN gNB
