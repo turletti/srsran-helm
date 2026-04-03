@@ -131,3 +131,5 @@ sriov:
   sriovNetworkNamespace: "sriov-network-operator"
   sriovResourceName: "benetel_ru"
   vlan: 801
+  pfName: "ens15f1np1"
+  pciAddress: null  # filled with ansible

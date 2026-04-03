@@ -18,7 +18,7 @@ spec:
           [
             { "name": "{{ .Values.n3networkName }}", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
             {{- if .Values.sriov.enabled }}
-            , { "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}" }
+            , { "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}", "mac": "{{ .Values.sriov.mac }}" }
             {{- end }}
           ]
     spec:
