@@ -11,4 +11,14 @@ spec:
   spoofChk: "off"
   trust: "on"
   capabilities: '{ "mac": true }'
+  ipam: |
+    {
+      "type": "host-local",
+      "subnet": "10.56.217.0/24",
+      "rangeStart": "10.56.217.171",
+      "rangeEnd": "10.56.217.191",
+      "routes": [{"dst": "0.0.0.0/0"}],
+      "gateway": "10.56.217.1"
+    }
 {{- end }}
+
