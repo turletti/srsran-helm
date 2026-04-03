@@ -1,17 +1,11 @@
-# =========================
-# Work in progress, still UNTESTED
-# values from https://github.com/srsran/srsRAN_Project/blob/main/configs/gnb_ru_ran550_tdd_n78_100mhz_4x2.yml
-# gNB values file for DPDK setup with Benetel.
-# =========================
-
 image:
-  repository: r2labuser/srsran-gnb-dpdk # including iproute2/ping/tcpdump
+  repository: r2labuser/srsran-gnb-dpdk
   tag: v1.0
   pullPolicy: IfNotPresent
 
 start:
-  gnb: true # If false, the gNB container will just sleep and not start srsRAN gN
-  logs: true # If false, the gnb-log container will not be deployed
+  gnb: true
+  logs: true
 
 gnbIp: 10.10.3.231
 
@@ -61,10 +55,10 @@ gnbConfig:
     iq_scaling: 5.5
     cells:
       - network_interface: "0000:3a:09.3"
-        ru_mac_addr: 8c:1f:64:d1:12:8c # specific to benetel1
-        du_mac_addr: 00:11:22:33:44:66 # 80:61:5f:0d:df:aa
-        vlan_tag_cp: 801 # specific to benetel1
-        vlan_tag_up: 801 # specific to benetel1
+        ru_mac_addr: 8c:1f:64:d1:12:8c
+        du_mac_addr: 00:11:22:33:44:66
+        vlan_tag_cp: 801
+        vlan_tag_up: 801
         prach_port_id: [4, 5]
         dl_port_id: [0, 1, 2, 3]
         ul_port_id: [0, 1]

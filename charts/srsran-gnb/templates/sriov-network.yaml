@@ -1,8 +1,8 @@
-{{- if .Values.sriov }}
+{{- if .Values.sriov.enabled }}
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetwork
 metadata:
-  name: sriov-network
+  name: benetel-dpdk-network
   namespace: {{ .Values.sriov.sriovNetworkNamespace }}
 spec:
   networkNamespace: {{ .Values.namespace }}

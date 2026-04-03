@@ -17,8 +17,8 @@ spec:
         k8s.v1.cni.cncf.io/networks: |
           [
             { "name": "{{ .Values.n3networkName }}", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
-            {{- if .Values.sriov }},
-            { "name": "sriov-network", "interface": "{{ .Values.sriov.name }}" }
+            {{- if .Values.sriov.enabled }}
+            , { "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}" }
             {{- end }}
           ]
     spec:
@@ -30,26 +30,40 @@ spec:
           args:
             - |
               ip route del default dev n3 || true
-              {{- if .Values.sriov }}
+              {{- if .Values.sriov.enabled }}
+              
+              RESOLVED_CONFIG="/tmp/srsran-gnb.yaml"
+              cp /srsran/config/srsran-gnb.yaml "$RESOLVED_CONFIG"
+              
+              {{- if .Values.sriov.pciAddress }}
+              PCI_ADDR="{{ .Values.sriov.pciAddress }}"
+              {{- else }}
               for i in {1..30}; do
-                PCI_ADDR=$(cat /sys/class/net/ru/device/uevent 2>/dev/null | grep PCI_SLOT_NAME | cut -d= -f2)
+                PCI_ADDR=$(cat /sys/class/net/{{ .Values.sriov.name }}/device/uevent 2>/dev/null | grep PCI_SLOT_NAME | cut -d= -f2)
                 if [ -n "$PCI_ADDR" ]; then
                   break
                 fi
                 sleep 1
               done
-              echo "Detected PCI address: $PCI_ADDR"
-              cp /srsran/config/srsran-gnb.yaml /tmp/srsran-gnb.yaml
-              sed -i "s|0000:3a:09.[0-3]|$PCI_ADDR|g" /tmp/srsran-gnb.yaml
               {{- end }}
-              {{- if .Values.start.gnb }}
-                {{- if .Values.sriov }}
-                /usr/local/bin/gnb -c /tmp/srsran-gnb.yaml
-                {{- else }}
-                /usr/local/bin/gnb -c /srsran/config/srsran-gnb.yaml
-                {{- end }}
+              
+              if [ -z "$PCI_ADDR" ]; then
+                echo "ERROR: Could not determine PCI address for {{ .Values.sriov.name }}"
+                exit 1
+              fi
+              
+              echo "PCI address resolved: $PCI_ADDR"
+              sed -i "s|0000:3a:09\.[0-3]|$PCI_ADDR|g" "$RESOLVED_CONFIG"
+              
+              CONFIG_FILE="$RESOLVED_CONFIG"
               {{- else }}
-                sleep infinity
+              CONFIG_FILE="/srsran/config/srsran-gnb.yaml"
+              {{- end }}
+              
+              {{- if .Values.start.gnb }}
+              /usr/local/bin/gnb -c $CONFIG_FILE
+              {{- else }}
+              sleep infinity
               {{- end }}
           ports:
             - name: metrics
@@ -63,7 +77,7 @@ spec:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "rm -rf /mnt/*_log.txt"]
-          {{- if .Values.sriov }}
+          {{- if .Values.sriov.enabled }}
           resources:
             requests:
               memory: "4Gi"
