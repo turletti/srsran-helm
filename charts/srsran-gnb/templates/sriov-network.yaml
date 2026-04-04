@@ -12,7 +12,7 @@ spec:
   trust: "on"
   capabilities: '{ "mac": true }'
   pfNames:
-    - "{{ .Values.sriov.pfName | default \"ens15f1np1\" }}"
+    - "{{ .Values.sriov.pfName | default "ens15f1np1" }}"
   ipam: |
     {
       "type": "host-local",
