@@ -11,8 +11,6 @@ spec:
   spoofChk: "off"
   trust: "on"
   capabilities: '{ "mac": true }'
-  pfNames:
-    - "{{ .Values.sriov.pfName | default "ens15f1np1" }}"
   ipam: |
     {
       "type": "host-local",

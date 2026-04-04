@@ -60,9 +60,9 @@ gnbConfig:
     enable_dl_static_compr_hdr: false
     iq_scaling: 5.5
     cells:
-      - network_interface: "0000:3a:09.3"
+      - network_interface: "{{ .Values.sriov.pciAddress }}"
         ru_mac_addr: 8c:1f:64:d1:12:8c # specific to benetel1
-        du_mac_addr: 00:11:22:33:44:66 # 80:61:5f:0d:df:aa
+        du_mac_addr: "{{ .Values.sriov.mac }}" # 80:61:5f:0d:df:aa for benetel2
         vlan_tag_cp: 801 # specific to benetel1
         vlan_tag_up: 801 # specific to benetel1
         prach_port_id: [4, 5]
@@ -128,8 +128,8 @@ sriov:
   type: sriov
   mac: "00:11:22:33:44:66"
   pciAddress: 0000:3a:09.0
-  sriovNetworkNamespace: "sriov-network-operator"
-  sriovResourceName: "benetel_ru"
+  sriovNetworkNamespace: sriov-network-operator
+  sriovResourceName: benetel_ru
   vlan: 801
   pfName: "ens15f1np1"
-  pciAddress: null  # filled with ansible
+
