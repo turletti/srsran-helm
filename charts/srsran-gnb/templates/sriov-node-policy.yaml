@@ -1,0 +1,18 @@
+{{- if .Values.sriov.enabled }}
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: benetel-dpdk-policy
+  namespace: sriov-network-operator
+spec:
+  deviceType: vfio-pci
+  mtu: 9216
+  nicSelector:
+    rootDevices:
+      - "{{ .Values.sriov.rootDevice }}"
+  nodeSelector:
+    kubernetes.io/hostname: "{{ .Values.nodeName }}"
+  numVfs: 4
+  priority: 99
+  resourceName: {{ .Values.sriov.sriovResourceName }}
+{{- end }}
