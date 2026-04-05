@@ -4,6 +4,12 @@ kind: SriovNetworkNodePolicy
 metadata:
   name: benetel-dpdk-policy
   namespace: sriov-network-operator
+  labels:
+    app: srsran-gnb
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: srsran-gnb
+    meta.helm.sh/release-namespace: open5gs
 spec:
   deviceType: vfio-pci
   mtu: 9216
