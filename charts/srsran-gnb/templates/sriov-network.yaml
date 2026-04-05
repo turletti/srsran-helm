@@ -4,6 +4,13 @@ kind: SriovNetwork
 metadata:
   name: benetel-dpdk-network
   namespace: {{ .Values.sriov.sriovNetworkNamespace }}
+  labels:
+    app.kubernetes.io/name: srsran-gnb
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 spec:
   networkNamespace: {{ .Values.namespace }}
   resourceName: {{ .Values.sriov.sriovResourceName }}
@@ -22,3 +29,4 @@ spec:
       "gateway": "10.56.217.1"
     }
 {{- end }}
+
