@@ -10,6 +10,7 @@ spec:
   vlan: {{ .Values.sriov.vlan }}
   spoofChk: "off"
   trust: "on"
+  deviceType: vfio-pci
   capabilities: '{ "mac": true }'
   ipam: |
     {
@@ -21,4 +22,3 @@ spec:
       "gateway": "10.56.217.1"
     }
 {{- end }}
-
