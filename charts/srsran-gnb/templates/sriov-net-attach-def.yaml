@@ -4,14 +4,16 @@ kind: NetworkAttachmentDefinition
 metadata:
   name: benetel-dpdk-network
   namespace: {{ .Values.namespace }}
+  annotations:
+    # Mandatory for multus to forward PCI address to CNI
+    k8s.v1.cni.cncf.io/resourceName: openshift.io/{{ .Values.sriov.sriovResourceName }}
 spec:
   config: |
     {
       "cniVersion": "0.3.1",
       "name": "benetel-dpdk-network",
       "type": "sriov",
-      "resourceName": "openshift.io/{{ .Values.sriov.sriovResourceName }}",
-      "vlan": {{ .Values.sriov.vlan | default 0 }},
+      "vlan": {{ .Values.sriov.vlan }},
       "spoofchk": "off",
       "trust": "on",
       "ipam": {
