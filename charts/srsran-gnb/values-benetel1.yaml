@@ -18,9 +18,7 @@ start:
 
 gnbConfig:
   hal:
-    # AJOUT : rx_proto_one=1 pour éviter le freeze RXDID[22] sur Intel E810
-    # CORRECTION : Adresse PCI 3a:09.1 (allouée par ton scheduler K8s)
-    eal_args: "--lcores (0-1)@(0-23) -a 0000:3a:09.1,force_legacy_rx=1"
+    eal_args: "--lcores '(0-1)@(0-23)' --force-max-simd-bitwidth=64 -a 0000:3a:09.1"
   cu_cp:
     inactivity_timer: 7200
     request_pdu_session_timeout: 30
