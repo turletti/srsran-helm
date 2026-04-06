@@ -62,6 +62,7 @@ gnbConfig:
     iq_scaling: 5.5
     cells:
       - network_interface: "0000:3a:09.0"
+        mtu: 9216
         ru_mac_addr: 8c:1f:64:d1:12:8c
         du_mac_addr: "00:11:22:33:44:66"
         vlan_tag_cp: 801
