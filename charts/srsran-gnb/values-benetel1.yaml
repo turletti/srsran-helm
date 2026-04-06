@@ -18,7 +18,9 @@ start:
 
 gnbConfig:
   hal:
-    eal_args: "--lcores (0-1)@(0-23)"
+    # AJOUT : rx_proto_one=1 pour éviter le freeze RXDID[22] sur Intel E810
+    # CORRECTION : Adresse PCI 3a:09.1 (allouée par ton scheduler K8s)
+    eal_args: "--lcores (0-1)@(0-23) -a 0000:3a:09.1,rx_proto_one=1"
   cu_cp:
     inactivity_timer: 7200
     request_pdu_session_timeout: 30
@@ -61,7 +63,7 @@ gnbConfig:
     enable_dl_static_compr_hdr: false
     iq_scaling: 5.5
     cells:
-      - network_interface: "0000:3a:09.0"
+      - network_interface: "0000:3a:09.1"
         mtu: 9216
         ru_mac_addr: 8c:1f:64:d1:12:8c
         du_mac_addr: "00:11:22:33:44:66"
