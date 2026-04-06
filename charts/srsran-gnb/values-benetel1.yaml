@@ -18,7 +18,7 @@ start:
 
 gnbConfig:
   hal:
-    eal_args: "--lcores '(0-1)@(0-23)' --force-max-simd-bitwidth=64 -a 0000:3a:09.1"
+    eal_args: "-l 0,1 -a 0000:3a:09.1,proto_xtr=none"
   cu_cp:
     inactivity_timer: 7200
     request_pdu_session_timeout: 30
