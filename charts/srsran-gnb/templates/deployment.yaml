@@ -57,7 +57,8 @@ spec:
               PCI_ADDR=$(echo $PCI_ADDR | cut -d',' -f1)
               echo "PCI address resolved: $PCI_ADDR"
 
-              sed -i "s|0000:3a:09\.[0-3]|$PCI_ADDR|g" "$RESOLVED_CONFIG"
+              OLD_PCI=$(grep -oP '[0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\.[0-9]' "$RESOLVED_CONFIG" | head -1)
+              sed -i "s|$OLD_PCI|$PCI_ADDR|g" "$RESOLVED_CONFIG"
               CONFIG_FILE="$RESOLVED_CONFIG"
               {{- else }}
               CONFIG_FILE="/srsran/config/srsran-gnb.yaml"
