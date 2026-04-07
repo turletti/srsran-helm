@@ -41,11 +41,6 @@ gnbConfig:
                 - sst: 1
                 - sst: 1
                   sd: "000002"
-  expert_phy:
-    nof_pdsch_threads: 4
-    nof_pusch_threads: 4
-    nof_ul_threads: 4
-    dl_pipeline_length: 4
   ru_ofh:
     t1a_max_cp_dl: 500 # 535
     t1a_min_cp_dl: 258 # 286
