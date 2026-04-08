@@ -12,7 +12,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "benetel-dpdk-network",
       "type": "sriov",
-      "deviceID": "",
+      "deviceID": "{{ .Values.sriov.pciAddress }}",
       "vlan": {{ .Values.sriov.vlan }},
       "spoofchk": "off",
       "trust": "on",
