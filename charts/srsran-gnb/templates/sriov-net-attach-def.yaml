@@ -13,6 +13,7 @@ spec:
       "name": "benetel-dpdk-network",
       "type": "sriov",
       "deviceID": "{{ .Values.sriov.pciAddress }}",
+      "mac": "{{ .Values.sriov.mac }}",
       "vlan": {{ .Values.sriov.vlan }},
       "spoofchk": "off",
       "trust": "on",
