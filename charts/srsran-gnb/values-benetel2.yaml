@@ -2,23 +2,37 @@
 # values from https://github.com/srsran/srsRAN_Project/blob/main/configs/gnb_ru_ran550_tdd_n78_100mhz_4x2.yml
 # gNB values file for DPDK setup with Benetel.
 # =========================
-
 image:
   repository: r2labuser/srsran-gnb-dpdk
   tag: v1.0
   pullPolicy: IfNotPresent
-
-namespace: open5gs
-#n3networkName: n3network # added with ansible
 gnbIp: 10.10.3.231
-
 start:
   gnb: true
   logs: true
-
 gnbConfig:
   hal:
-    eal_args: "-l 6,7,8,9,10,11 --main-lcore 6 --force-max-simd-bitwidth 64 -a 0000:3a:09.1"
+    eal_args: "-l 6,7,8,9,10,11 --main-lcore 6 --force-max-simd-bitwidth 64 -a 0000:3a:09.0"
+  expert_execution:
+    affinities:
+      main_pool_cpus: "9,10,11"
+      main_pool_pinning: mask
+      ofh:
+        timing_cpu: "7"
+        txrx_cpus: "8"
+    threads:
+      main_pool:
+        nof_threads: 3
+        task_queue_size: 4096
+        backoff_period: 50
+      upper_phy:
+        pdsch_processor_type: auto
+        pdsch_cb_batch_length: 4
+        max_pusch_and_srs_concurrency: 2
+        max_pucch_concurrency: 2
+        max_pdsch_concurrency: 2
+      lower_phy:
+        execution_profile: triple
   cu_cp:
     inactivity_timer: 7200
     request_pdu_session_timeout: 30
@@ -42,12 +56,12 @@ gnbConfig:
                 - sst: 1
                   sd: "000002"
   ru_ofh:
-    t1a_max_cp_dl: 500 # 535
-    t1a_min_cp_dl: 258 # 286
-    t1a_max_cp_ul: 500 # 535
-    t1a_min_cp_ul: 258 # 286
-    t1a_max_up: 345 # 390
-    t1a_min_up: 50 # 80
+    t1a_max_cp_dl: 535
+    t1a_min_cp_dl: 286
+    t1a_max_cp_ul: 535
+    t1a_min_cp_ul: 286
+    t1a_max_up: 390
+    t1a_min_up: 80
     ta4_max: 500
     ta4_min: 25
     is_prach_cp_enabled: true
@@ -61,10 +75,10 @@ gnbConfig:
     enable_dl_static_compr_hdr: false
     iq_scaling: 5.5
     cells:
-      - network_interface: "0000:3a:09.1"
+      - network_interface: "0000:3a:09.0"
         mtu: 9216
         ru_mac_addr: 8c:1f:64:d1:12:50
-        du_mac_addr: "00:11:22:33:44:66"
+        du_mac_addr: 00:11:22:33:44:66
         vlan_tag_cp: 802
         vlan_tag_up: 802
         prach_port_id: [4, 5]
@@ -85,7 +99,7 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     ssb:
-      ssb_block_power_dbm: -4
+      ssb_block_power_dbm: -11
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
@@ -123,12 +137,11 @@ gnbConfig:
     bind_addr: 0.0.0.0
     enabled: true
     port: 8001
-
 sriov:
   enabled: true
   name: "ru"
   type: sriov
-  mac: "00:11:22:33:44:66"
+  mac: 00:11:22:33:44:66
   pciAddress: ""
   sriovResourceName: "ruvfioc"
   vlan: 802
