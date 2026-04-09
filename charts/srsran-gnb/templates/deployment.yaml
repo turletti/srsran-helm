@@ -25,6 +25,41 @@ spec:
             {{- end }}
           ]
     spec:
+
+      {{- if .Values.sriov.enabled }}
+      initContainers:
+        - name: init-ru-sriov
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "=== Vérification / création interface SR-IOV '{{ .Values.sriov.name }}' ==="
+              IFNAME="{{ .Values.sriov.name }}"
+              
+              echo "===== Vérification VF exposée ====="
+              VF=$(env | grep PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper }} | cut -d= -f2)
+              if [ -z "$VF" ]; then
+                  echo "Erreur: VF non exposée dans le pod"
+              else
+                  echo "VF trouvée: $VF"
+              fi
+              
+              echo "===== Vérification périphériques VF ====="
+              ls -l /dev/vfio || echo "/dev/vfio introuvable"
+              
+              if ! ip link show $IFNAME >/dev/null 2>&1; then
+                echo "Interface $IFNAME manquante, création manuelle de type dummy pour debug..."
+                ip link add $IFNAME type dummy
+                ip link set $IFNAME up
+              else
+                echo "Interface $IFNAME déjà présente"
+              fi
+              ip link show $IFNAME
+          securityContext:
+            privileged: true
+      {{- end }}
+
       containers:
         - name: gnb
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
