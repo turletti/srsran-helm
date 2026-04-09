@@ -8,7 +8,6 @@ image:
   tag: v1.0
   pullPolicy: IfNotPresent
 
-namespace: open5gs
 gnbIp: 10.10.3.231
 
 start:
