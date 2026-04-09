@@ -40,12 +40,12 @@ gnbConfig:
                 - sst: 1
                   sd: "000002"
   ru_ofh:
-    t1a_max_cp_dl: 500 # 535
-    t1a_min_cp_dl: 258 # 286
-    t1a_max_cp_ul: 500 # 535
-    t1a_min_cp_ul: 258 # 286
-    t1a_max_up: 345 # 390
-    t1a_min_up: 50 # 80
+    t1a_max_cp_dl: 535
+    t1a_min_cp_dl: 286
+    t1a_max_cp_ul: 535
+    t1a_min_cp_ul: 286
+    t1a_max_up: 390
+    t1a_min_up: 80
     ta4_max: 500
     ta4_min: 25
     is_prach_cp_enabled: true
@@ -62,7 +62,7 @@ gnbConfig:
       - network_interface: "0000:3a:09.0" # will be updated with sed
         mtu: 9216
         ru_mac_addr: 8c:1f:64:d1:12:8c
-        du_mac_addr: "00:11:22:33:44:66"
+        du_mac_addr: 00:11:22:33:44:66
         vlan_tag_cp: 801
         vlan_tag_up: 801
         prach_port_id: [4, 5]
@@ -83,7 +83,7 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     ssb:
-      ssb_block_power_dbm: -4
+      ssb_block_power_dbm: -11 # for RAN550 with 24dBm Tx power
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
@@ -126,7 +126,7 @@ sriov:
   enabled: true
   name: "ru"
   type: sriov
-  mac: "00:11:22:33:44:66"
+  mac: 00:11:22:33:44:66
   pciAddress: ""
   sriovResourceName: "ruvfioc"
   vlan: 801
