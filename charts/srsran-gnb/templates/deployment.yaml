@@ -25,46 +25,6 @@ spec:
             {{- end }}
           ]
     spec:
-      {{- if .Values.sriov.enabled }}
-      initContainers:
-        - name: init-ru-sriov
-          image: busybox
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "=== InitContainer: Vérification SR-IOV VF et interface ru ==="
-
-              RETRIES=10
-              SLEEP=3
-              VF=""
-              for i in $(seq 1 $RETRIES); do
-                VF=$(env | grep PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper | replace "-" "_" }} | cut -d= -f2)
-                if [ -n "$VF" ]; then
-                  echo "VF trouvée: $VF"
-                  break
-                fi
-                echo "VF non trouvée, tentative $i/$RETRIES, attente $SLEEP s..."
-                sleep $SLEEP
-              done
-
-              if [ -z "$VF" ]; then
-                echo "Erreur: VF non exposée après $RETRIES tentatives"
-                exit 1
-              fi
-
-              echo "=== Vérification périphériques /dev/vfio ==="
-              ls -l /dev/vfio | grep -E "[0-9]+" || echo "Attention: /dev/vfio vide ou VF absente"
-
-              echo "=== Création interface {{ .Values.sriov.name }} si manquante ==="
-              if ! ip link show {{ .Values.sriov.name }} >/dev/null 2>&1; then
-                echo "Interface {{ .Values.sriov.name }} manquante, création temporaire dummy pour debug..."
-                ip link add {{ .Values.sriov.name }} type dummy
-                ip link set {{ .Values.sriov.name }} up
-              else
-                echo "Interface {{ .Values.sriov.name }} déjà présente"
-              fi
-              ip link show {{ .Values.sriov.name }}
-      {{- end }}
       containers:
         - name: gnb
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -75,25 +35,20 @@ spec:
               ip route del default dev n3 || true
 
               {{- if .Values.sriov.enabled }}
+              # Vérification VF SR-IOV
+              VF_DEVICE=${PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper }}:-}
+              if [ -z "$VF_DEVICE" ]; then
+                echo "ERROR: VF non exposée dans le pod, abort"
+                exit 1
+              fi
+              echo "VF ready: $VF_DEVICE"
+              ls -l /dev/vfio
+
+              # Préparation config gNB
               RESOLVED_CONFIG="/tmp/srsran-gnb.yaml"
               cp /srsran/config/srsran-gnb.yaml "$RESOLVED_CONFIG"
 
-              {{- if .Values.sriov.pciAddress }}
-              PCI_ADDR="{{ .Values.sriov.pciAddress }}"
-              {{- else }}
-              RESOURCE_VAR=$(echo "PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName }}" | tr '[:lower:]' '[:upper:]' | tr '-' '_' | tr '.' '_')
-              PCI_ADDR=${!RESOURCE_VAR}
-
-              if [ -z "$PCI_ADDR" ]; then
-                PCI_ADDR=$(cat /sys/class/net/{{ .Values.sriov.name }}/device/uevent 2>/dev/null | grep PCI_SLOT_NAME | cut -d= -f2)
-              fi
-              {{- end }}
-
-              if [ -z "$PCI_ADDR" ]; then
-                echo "ERROR: Could not determine PCI address"
-                exit 1
-              fi
-
+              PCI_ADDR="$VF_DEVICE"
               PCI_ADDR=$(echo $PCI_ADDR | cut -d',' -f1)
               echo "PCI address resolved: $PCI_ADDR"
 
