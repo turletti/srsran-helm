@@ -71,7 +71,7 @@ spec:
               {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.gnbConfig.remote_control.port }}
+              containerPort: 8001
               protocol: TCP
           securityContext:
             privileged: true
