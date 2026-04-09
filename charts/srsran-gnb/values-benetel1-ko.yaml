@@ -42,14 +42,14 @@ gnbConfig:
                 - sst: 1
                   sd: "000002"
   ru_ofh:
-    t1a_max_cp_dl: 500 # 535
-    t1a_min_cp_dl: 258 # 286
-    t1a_max_cp_ul: 500 # 535
-    t1a_min_cp_ul: 258 # 286
-    t1a_max_up: 345 # 390
-    t1a_min_up: 50 # 80
-    ta4_max: 500
-    ta4_min: 25
+    t1a_max_cp_dl: 470 
+    t1a_min_cp_dl: 419 
+    t1a_max_cp_ul: 336 
+    t1a_min_cp_ul: 285 
+    t1a_max_up: 345 
+    t1a_min_up: 294 
+    ta4_max: 200 
+    ta4_min: 0 
     is_prach_cp_enabled: true
     compr_method_ul: bfp
     compr_bitwidth_ul: 9
@@ -59,7 +59,7 @@ gnbConfig:
     compr_bitwidth_prach: 9
     enable_ul_static_compr_hdr: false
     enable_dl_static_compr_hdr: false
-    iq_scaling: 5.5
+    iq_scaling: 20
     cells:
       - network_interface: "0000:3a:09.0" # will be updated with sed
         mtu: 9216
@@ -85,7 +85,7 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     ssb:
-      ssb_block_power_dbm: -4
+      ssb_block_power_dbm: -11 # -4
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
