@@ -9,7 +9,6 @@ image:
   pullPolicy: IfNotPresent
 
 namespace: open5gs
-n3networkName: n3network
 gnbIp: 10.10.3.231
 
 start:
