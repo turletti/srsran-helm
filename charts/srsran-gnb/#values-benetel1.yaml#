@@ -104,7 +104,7 @@ gnbConfig:
   metrics:
     enable_log: false
     autostart_stdout_metrics: true
-    enable_json: true
+bg    enable_json: true
     layers:
       enable_app_usage: true
       enable_e1ap: true
