@@ -6,4 +6,4 @@ metadata:
     {{- include "srsran-gnb.labels" . | nindent 4 }}
 data:
   srsran-gnb.yaml: |-
-{{ toYaml (fromJson (toJson .Values.gnbConfig)) | indent 4 }}
+{{ .Values.gnbConfigRaw | indent 4 }}
