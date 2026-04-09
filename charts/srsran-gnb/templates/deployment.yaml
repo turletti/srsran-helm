@@ -35,7 +35,7 @@ spec:
               ip route del default dev n3 || true
 
               {{- if .Values.sriov.enabled }}
-              # Vérification VF SR-IOV
+              # Check VF SR-IOV
               VF_DEVICE=${PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper }}:-}
               if [ -z "$VF_DEVICE" ]; then
                 echo "ERROR: VF non exposée dans le pod, abort"
@@ -44,7 +44,7 @@ spec:
               echo "VF ready: $VF_DEVICE"
               ls -l /dev/vfio
 
-              # Préparation config gNB
+              # Prepare gNB config
               RESOLVED_CONFIG="/tmp/srsran-gnb.yaml"
               cp /srsran/config/srsran-gnb.yaml "$RESOLVED_CONFIG"
 
