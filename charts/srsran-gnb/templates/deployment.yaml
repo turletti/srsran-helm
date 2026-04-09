@@ -14,14 +14,14 @@ spec:
       labels:
         {{- include "srsran-gnb.selectorLabels" . | nindent 8 }}
       annotations:
-        k8s.v1.cni.cncf.io/networks: |
+        k8s.v1.cni.cncf.io/networks: >-
           [
             { "name": "{{ .Values.n3networkName }}", "interface": "n3", "ips": [ "{{ .Values.gnbIp }}/24" ] }
-            {{- if .Values.ru }},
-            { "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
+            {{- if .Values.ru }}
+            ,{ "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
             {{- end }}
             {{- if .Values.sriov.enabled }}
-            , { "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}" }
+            ,{ "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}" }
             {{- end }}
           ]
     spec:
