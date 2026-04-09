@@ -32,26 +32,38 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "=== Vérification VF exposée ==="
-              VF=$(env | grep PCIDEVICE_OPENSHIFT_IO_RUVFIOC | cut -d= -f2)
+              echo "=== InitContainer: Vérification SR-IOV VF et interface ru ==="
+
+              RETRIES=10
+              SLEEP=3
+              VF=""
+              for i in $(seq 1 $RETRIES); do
+                VF=$(env | grep PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper | replace "-" "_" }} | cut -d= -f2)
+                if [ -n "$VF" ]; then
+                  echo "VF trouvée: $VF"
+                  break
+                fi
+                echo "VF non trouvée, tentative $i/$RETRIES, attente $SLEEP s..."
+                sleep $SLEEP
+              done
+
               if [ -z "$VF" ]; then
-                echo "Erreur: VF non exposée dans le pod"
+                echo "Erreur: VF non exposée après $RETRIES tentatives"
                 exit 1
               fi
-              echo "VF trouvée: $VF"
 
-              echo "=== Vérification périphériques VF ==="
-              ls -l /dev/vfio | grep -E "[0-9]+"
+              echo "=== Vérification périphériques /dev/vfio ==="
+              ls -l /dev/vfio | grep -E "[0-9]+" || echo "Attention: /dev/vfio vide ou VF absente"
 
-              echo "=== Création interface ru si manquante ==="
-              if ! ip link show ru >/dev/null 2>&1; then
-                echo "Interface ru manquante, création manuelle de type dummy pour debug..."
-                ip link add ru type dummy
-                ip link set ru up
+              echo "=== Création interface {{ .Values.sriov.name }} si manquante ==="
+              if ! ip link show {{ .Values.sriov.name }} >/dev/null 2>&1; then
+                echo "Interface {{ .Values.sriov.name }} manquante, création temporaire dummy pour debug..."
+                ip link add {{ .Values.sriov.name }} type dummy
+                ip link set {{ .Values.sriov.name }} up
               else
-                echo "Interface ru déjà présente"
+                echo "Interface {{ .Values.sriov.name }} déjà présente"
               fi
-              ip link show ru
+              ip link show {{ .Values.sriov.name }}
       {{- end }}
       containers:
         - name: gnb
