@@ -56,14 +56,14 @@ gnbConfig:
                 - sst: 1
                   sd: "000002"
   ru_ofh:
-    t1a_max_cp_dl: 535
-    t1a_min_cp_dl: 286
-    t1a_max_cp_ul: 535
-    t1a_min_cp_ul: 286
-    t1a_max_up: 390
-    t1a_min_up: 80
-    ta4_max: 500
-    ta4_min: 25
+    t1a_max_cp_dl: 470 # 535
+    t1a_min_cp_dl: 419 # 286
+    t1a_max_cp_ul: 336 # 535
+    t1a_min_cp_ul: 285 # 286
+    t1a_max_up: 345 # 390
+    t1a_min_up: 294 # 80
+    ta4_max: 200 # 500
+    ta4_min: 0 # 25
     is_prach_cp_enabled: true
     compr_method_ul: bfp
     compr_bitwidth_ul: 9
