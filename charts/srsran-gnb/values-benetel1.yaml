@@ -99,7 +99,7 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     ssb:
-      ssb_block_power_dbm: -11
+      ssb_block_power_dbm: -3 # was -11
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
@@ -113,6 +113,8 @@ gnbConfig:
   log:
     filename: /var/log/gnb.log
     all_level: warning
+    phy_level: debug
+    ru_level: debug
     config_level: debug
   metrics:
     enable_log: false
