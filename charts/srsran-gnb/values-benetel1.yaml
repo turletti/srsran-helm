@@ -82,7 +82,7 @@ gnbConfig:
         vlan_tag_cp: 801
         vlan_tag_up: 801
         prach_port_id: [4, 5]
-        dl_port_id: [0, 1, 2, 3]
+        dl_port_id: [0, 0, 0, 0] # was [0, 1, 2, 3]
         ul_port_id: [0, 1]
   cell_cfg:
     dl_arfcn: 637212
