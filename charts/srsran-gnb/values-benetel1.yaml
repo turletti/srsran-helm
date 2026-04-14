@@ -73,7 +73,7 @@ gnbConfig:
     compr_bitwidth_prach: 9
     enable_ul_static_compr_hdr: false
     enable_dl_static_compr_hdr: false
-    iq_scaling: 5.5
+    iq_scaling: 20 # was 5.5
     cells:
       - network_interface: "0000:3a:09.0"
         mtu: 9216
@@ -85,7 +85,7 @@ gnbConfig:
         dl_port_id: [0, 1, 2, 3]
         ul_port_id: [0, 1]
   cell_cfg:
-    dl_arfcn: 636768 # was 637212
+    dl_arfcn: 637212
     band: 78
     channel_bandwidth_MHz: 100
     common_scs: 30
