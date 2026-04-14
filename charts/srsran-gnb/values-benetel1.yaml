@@ -114,7 +114,6 @@ gnbConfig:
     filename: /var/log/gnb.log
     all_level: warning
     phy_level: debug
-    ru_level: debug
     config_level: debug
   metrics:
     enable_log: false
