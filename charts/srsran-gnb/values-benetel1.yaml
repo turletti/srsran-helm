@@ -98,6 +98,10 @@ gnbConfig:
       prach_config_index: 159
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
+    pucch:
+      p0_nominal: -60
+    pusch:
+      p0_nominal_with_grant: -60
     ssb:
       ssb_block_power_dbm: -3 # was -11
     tdd_ul_dl_cfg:
