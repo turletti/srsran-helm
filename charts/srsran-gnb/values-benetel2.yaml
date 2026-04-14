@@ -56,14 +56,14 @@ gnbConfig:
                 - sst: 1
                   sd: "000002"
   ru_ofh:
-    t1a_max_cp_dl: 535
-    t1a_min_cp_dl: 286
-    t1a_max_cp_ul: 535
-    t1a_min_cp_ul: 286
-    t1a_max_up: 390
-    t1a_min_up: 80
-    ta4_max: 500
-    ta4_min: 25
+    t1a_max_cp_dl: 470 # 535
+    t1a_min_cp_dl: 419 # 286
+    t1a_max_cp_ul: 336 # 535
+    t1a_min_cp_ul: 285 # 286
+    t1a_max_up: 345 # 390
+    t1a_min_up: 294 # 80
+    ta4_max: 200 # 500
+    ta4_min: 0 # 25
     is_prach_cp_enabled: true
     compr_method_ul: bfp
     compr_bitwidth_ul: 9
@@ -98,8 +98,12 @@ gnbConfig:
       prach_config_index: 159
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
+    pucch:
+      p0_nominal: -60
+    pusch:
+      p0_nominal_with_grant: -60
     ssb:
-      ssb_block_power_dbm: -11
+      ssb_block_power_dbm: -3 # was -11
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
@@ -113,6 +117,7 @@ gnbConfig:
   log:
     filename: /var/log/gnb.log
     all_level: warning
+    phy_level: debug # DEBUG
     config_level: debug
   metrics:
     enable_log: false
