@@ -1,4 +1,5 @@
-{{- if .Values.sriov.enabled }}
+{{- $sriov := .Values.sriov | default dict }}
+{{- if $sriov.enabled | default false }}
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
