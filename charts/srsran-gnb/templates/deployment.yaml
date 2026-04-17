@@ -87,6 +87,7 @@ spec:
               hugepages-1Gi: "2Gi"
               openshift.io/{{ $sriov.sriovResourceName }}: "1"
           {{- else }}
+          {{- if .Values.resources.define}}
           resources:
             requests:
               memory: {{ .Values.resources.requests.tcpdump.memory | quote }}
@@ -94,7 +95,6 @@ spec:
             limits:
               memory: {{ .Values.resources.limits.tcpdump.memory | quote }}
               cpu: {{ .Values.resources.limits.tcpdump.cpu | quote }}
-          {{- if .Values.resources.define}}
           {{- end}}
           {{- end}}
           volumeMounts:
