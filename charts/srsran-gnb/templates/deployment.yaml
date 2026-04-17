@@ -4,6 +4,8 @@ metadata:
   name: {{ include "srsran-gnb.fullname" . }}
   labels:
     {{- include "srsran-gnb.labels" . | nindent 4 }}
+{{- $sriov := .Values.sriov | default dict }}
+{{- $sriovEnabled := $sriov.enabled | default false }}
 spec:
   selector:
     matchLabels:
@@ -20,8 +22,8 @@ spec:
             {{- if .Values.ru }}
             ,{ "name": "ru-network", "interface": "ru1", "ips": [ "{{ .Values.ruPodIp }}/24" ] }
             {{- end }}
-            {{- if .Values.sriov.enabled }}
-            ,{ "name": "benetel-dpdk-network", "interface": "{{ .Values.sriov.name }}" }
+            {{- if $sriovEnabled }}
+            ,{ "name": "benetel-dpdk-network", "interface": "{{ $sriov.name }}" }
             {{- end }}
           ]
     spec:
@@ -34,9 +36,9 @@ spec:
             - |
               ip route del default dev n3 || true
 
-              {{- if .Values.sriov.enabled }}
+              {{- if $sriovEnabled }}
               # Check VF SR-IOV
-              VF_DEVICE=${PCIDEVICE_OPENSHIFT_IO_{{ .Values.sriov.sriovResourceName | upper }}:-}
+              VF_DEVICE=${PCIDEVICE_OPENSHIFT_IO_{{ $sriov.sriovResourceName | upper }}:-}
               if [ -z "$VF_DEVICE" ]; then
                 echo "ERROR: VF non exposée dans le pod, abort"
                 exit 1
@@ -76,14 +78,14 @@ spec:
             requests:
               memory: "4Gi"
               hugepages-1Gi: "2Gi"
-              {{- if .Values.sriov.enabled }}
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+              {{- if $sriovEnabled }}
+              openshift.io/{{ $sriov.sriovResourceName }}: "1"
               {{- end }}
             limits:
               memory: "4Gi"
               hugepages-1Gi: "2Gi"
-              {{- if .Values.sriov.enabled }}
-              openshift.io/{{ .Values.sriov.sriovResourceName }}: "1"
+              {{- if $sriovEnabled }}
+              openshift.io/{{ $sriov.sriovResourceName }}: "1"
               {{- end }}
           volumeMounts:
             - mountPath: /srsran/config
