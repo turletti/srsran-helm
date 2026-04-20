@@ -43,6 +43,10 @@ spec:
       {{- if .Values.nodeName }}
       nodeName: {{ .Values.nodeName | quote }}
       {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
       volumes:
         - name: ue-config
           configMap:
