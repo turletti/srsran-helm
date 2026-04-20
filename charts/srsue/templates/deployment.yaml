@@ -41,7 +41,8 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       {{- if .Values.nodeName }}
-      nodeName: {{ .Values.nodeName }}
+      nodeSelector:
+        kubernetes.io/hostname: {{ .Values.nodeName }}
       {{- end }}
       volumes:
         - name: ue-config
