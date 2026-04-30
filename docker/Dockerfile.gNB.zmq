@@ -60,6 +60,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgtest-dev \
     libzmq3-dev \
     ca-certificates \
+    iproute2 iputils-ping tcpdump \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/srs /usr/local

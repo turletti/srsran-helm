@@ -80,7 +80,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pciutils \
     libfdt-dev \
     libatomic1 \
-    iproute2 \
+    iproute2 iputils-ping tcpdump \
+    inetutils-tools \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -90,7 +91,7 @@ ARG DPDK_VERSION
 
 COPY --from=builder /opt/dpdk/${DPDK_VERSION} /opt/dpdk/${DPDK_VERSION}
 
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dpdk/${DPDK_VERSION}/lib/:/opt/dpdk/${DPDK_VERSION}/lib/x86_64-linux-gnu/:/opt/dpdk/${DPDK_VERSION}/lib/aarch64-linux-gnu/
+ENV LD_LIBRARY_PATH=/usr/local/lib:/opt/dpdk/${DPDK_VERSION}/lib/:/opt/dpdk/${DPDK_VERSION}/lib/x86_64-linux-gnu/:/opt/dpdk/${DPDK_VERSION}/lib/aarch64-linux-gnu/
 
 ENV PATH=$PATH:/opt/dpdk/${DPDK_VERSION}/bin/
 
