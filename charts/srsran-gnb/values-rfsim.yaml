@@ -3,8 +3,8 @@
 # =========================
 
 image:
-  repository: docker.io/r2labuser/srsran-gnb-zmq # with iproute/ping/tcpdump
-  #repository: ghcr.io/ziyad-mabrouk/srsran-gnb-zmq
+  #repository: docker.io/r2labuser/srsran-gnb-zmq # with iproute/ping/tcpdump
+  repository: docker.io/r2labuser/srsran-gnb-zmq-csi # with csi utility
   tag: v1.0
   pullPolicy: IfNotPresent
 
@@ -107,6 +107,11 @@ gnbConfig:
     enabled: true
 
     port: 8001
+
+  csi_logger:
+    enabled: true
+    output_file: /tmp/csi_data.bin
+    format: binary
 
 # multus interface to reach USRP. use true to create it.
 usrp: false
