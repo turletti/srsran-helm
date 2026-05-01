@@ -108,10 +108,7 @@ gnbConfig:
 
     port: 8001
 
-  #csi_logger:
-  #  enabled: true
-  #  output_file: /tmp/csi_data.bin
-  #  format: binary
+  csi_logger_enabled: true 
 
 # multus interface to reach USRP. use true to create it.
 usrp: false
