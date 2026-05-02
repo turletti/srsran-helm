@@ -7,4 +7,4 @@ metadata:
 data:
   srsran-gnb.yaml: |-
 {{ toYaml .Values.gnbConfig | indent 4 }}
-    csi_logger_enabled: {{ .Values.csi_logger_enabled | default false }}
+
