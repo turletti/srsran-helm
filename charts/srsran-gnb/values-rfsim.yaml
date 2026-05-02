@@ -83,7 +83,6 @@ gnbConfig:
 
   metrics:
     enable_log: false
-    enable_metrics: true
     autostart_stdout_metrics: true
     enable_json: true
     layers:
