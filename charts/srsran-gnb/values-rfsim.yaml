@@ -108,7 +108,9 @@ gnbConfig:
 
     port: 8001
 
-csi_logger_enabled: true 
-
 # multus interface to reach USRP. use true to create it.
 usrp: false
+
+# CSI Logger configuration
+csi_logger_enabled: true
+csi_logger_period_slots: 1
