@@ -11,7 +11,7 @@
 image:
   repository: r2labuser/srsran-gnb-uhd # this image includes iproute2/ping/tcpdump
   #repository: ghcr.io/ziyad-mabrouk/srsran-gnb-uhd-csi
-  tag: v1.0.0.14
+  tag: v1.0.0.15
 
 resources:
   define: false      # If false, no resources section is added
