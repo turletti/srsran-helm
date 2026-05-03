@@ -60,7 +60,14 @@ spec:
               CONFIG_FILE="/srsran/config/srsran-gnb.yaml"
               {{- end }}
               {{- if .Values.start.gnb }}
-              /usr/local/bin/gnb -c $CONFIG_FILE
+              /usr/local/bin/gnb -c $CONFIG_FILE \
+              {{- if .Values.csi_logger_enabled }} \
+              --csi-logger-enabled \
+              --csi-logger-period-slots={{ .Values.csi_logger_period_slots }} \
+              {{- if .Values.csi_logger_all_subcarriers }} \
+              --csi-logger-all-subcarriers \
+              {{- end }} \
+              {{- end }}
               {{- else }}
               sleep infinity
               {{- end }}
