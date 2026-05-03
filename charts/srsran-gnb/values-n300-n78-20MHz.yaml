@@ -125,3 +125,7 @@ gnbConfig:
 ru: true
 ruSubnet: 192.168.235.0/24
 ruPodIp: 192.168.235.240
+
+# CSI Logger configuration
+csi_logger_enabled: true
+csi_logger_period_slots: 1
