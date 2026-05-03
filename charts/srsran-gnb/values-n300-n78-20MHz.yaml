@@ -127,3 +127,4 @@ ruPodIp: 192.168.235.240
 # CSI Logger configuration
 csi_logger_enabled: true
 csi_logger_period_slots: 1
+csi_logger_all_subcarriers: true  # NEW: log all subcarriers (false = 1 per PRB)
