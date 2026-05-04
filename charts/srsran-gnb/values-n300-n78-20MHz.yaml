@@ -10,7 +10,7 @@
 
 image:
   repository: r2labuser/srsran-gnb-uhd-csi # this image includes iproute2/ping/tcpdump
-  tag: v1.0.0.17
+  tag: v1.0.0.18
 
 resources:
   define: false      # If false, no resources section is added
