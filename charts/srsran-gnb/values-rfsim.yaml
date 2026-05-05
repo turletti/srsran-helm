@@ -5,7 +5,7 @@
 image:
   #repository: docker.io/r2labuser/srsran-gnb-zmq # with iproute/ping/tcpdump
   repository: docker.io/r2labuser/srsran-gnb-zmq-csi # with csi utility
-  tag: v1.0.0.19
+  tag: v1.0.0.21
   pullPolicy: IfNotPresent
 
 resources:
