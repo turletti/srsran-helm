@@ -3,8 +3,8 @@
 # gNB values file for DPDK setup with Benetel.
 # =========================
 image:
-  repository: r2labuser/srsran-gnb-dpdk
-  tag: v1.0
+  repository: r2labuser/ocudu-gnb-csi   # OCUDU + CSI logger (ocudu-csi-logging), DPDK / O-RAN 7.2
+  tag: release_26_10
   pullPolicy: IfNotPresent
 gnbIp: 10.10.3.231
 start:
@@ -85,6 +85,9 @@ gnbConfig:
         dl_port_id: [0, 1, 2, 3]
         ul_port_id: [0, 1]
   cell_cfg:
+    srs:                              # periodic SRS, required by the CSI logger
+      type_enabled: periodic
+      period_ms: 20
     dl_arfcn: 637212
     band: 78
     channel_bandwidth_MHz: 100
@@ -150,3 +153,11 @@ sriov:
   pciAddress: ""
   sriovResourceName: "ruvfioc"
   vlan: 802
+
+# CSI logger (ocudu-csi-logging, CSI CSV format v3.1). Needs periodic SRS: gnbConfig.cell_cfg.srs.
+csi:
+  enabled: true
+  hostPath: /data/csi            # directory on the RAN node; file csi_per_rb.csv, truncated at gNB start
+  flushCore: ""                  # CPU of the CSV writer thread (a housekeeping core); "" = not pinned
+  granularity: rb                # rb | subcarrier (one row per SRS pilot, no interpolation)
+  subcarrierSampling: 1          # subcarrier granularity only: keep 1 pilot out of N in each RB

@@ -3,9 +3,8 @@
 # =========================
 
 image:
-  #repository: docker.io/r2labuser/srsran-gnb-zmq # with iproute/ping/tcpdump
-  repository: docker.io/r2labuser/srsran-gnb-zmq-csi # with csi utility
-  tag: v1.0.0.21
+  repository: docker.io/r2labuser/ocudu-gnb-csi   # OCUDU + CSI logger (ocudu-csi-logging), ZeroMQ
+  tag: release_26_10-zmq
   pullPolicy: IfNotPresent
 
 resources:
@@ -45,10 +44,13 @@ gnbConfig:
     device_args: >-
       tx_port=tcp://10.10.3.231:2000,rx_port=tcp://10.10.3.232:2100,base_srate=23.04e6
     srate: 23.04                    # RF sample rate might need to be adjusted according to selected bandwidth.
-    tx_gain: 75                       # Transmit gain of the RF might need to adjusted to the given situation.
-    rx_gain: 75                       # Receive gain of the RF might need to adjusted to the given situation.
+    tx_gain: 0                       # OCUDU ZMQ: must be <= 0 dB (attenuation), 75 is refused
+    rx_gain: 0                       # OCUDU ZMQ: must be <= 0 dB (attenuation), 75 is refused
 
   cell_cfg:
+    srs:                              # periodic SRS, required by the CSI logger
+      type_enabled: periodic
+      period_ms: 20
     dl_arfcn: 368500                  # ARFCN of the downlink carrier (center frequency).
     band: 3                           # The NR band.
     channel_bandwidth_MHz: 20         # Bandwith in MHz. Number of PRBs will be automatically derived.
@@ -111,7 +113,10 @@ gnbConfig:
 # multus interface to reach USRP. use true to create it.
 usrp: false
 
-# CSI Logger configuration
-csi_logger_enabled: true
-csi_logger_period_slots: 1
-csi_logger_all_subcarriers: true  # NEW: log all subcarriers (false = 1 per PRB)
+# CSI logger (ocudu-csi-logging, CSI CSV format v3.1). Needs periodic SRS: gnbConfig.cell_cfg.srs.
+csi:
+  enabled: true
+  hostPath: /data/csi            # directory on the RAN node; file csi_per_rb.csv, truncated at gNB start
+  flushCore: ""                  # CPU of the CSV writer thread (a housekeeping core); "" = not pinned
+  granularity: rb                # rb | subcarrier (one row per SRS pilot, no interpolation)
+  subcarrierSampling: 1          # subcarrier granularity only: keep 1 pilot out of N in each RB

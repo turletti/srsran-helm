@@ -9,8 +9,8 @@
 #
 
 image:
-  repository: r2labuser/srsran-gnb-uhd-csi # this image includes iproute2/ping/tcpdump
-  tag: v1.0.0.21
+  repository: r2labuser/ocudu-gnb-csi   # OCUDU + CSI logger (ocudu-csi-logging), UHD
+  tag: release_26_10-uhd
 
 resources:
   define: false      # If false, no resources section is added
@@ -61,6 +61,9 @@ gnbConfig:
     rx_gain: 60                       # Receive gain of the RF might need to adjusted to the given situation.
 
   cell_cfg:
+    srs:                              # periodic SRS, required by the CSI logger
+      type_enabled: periodic
+      period_ms: 20
     dl_arfcn: 640000                  # ARFCN of the downlink carrier (center frequency).
     band: 78                          # The NR band.
     channel_bandwidth_MHz: 20         # Bandwith in MHz. Number of PRBs will be automatically derived.
@@ -123,7 +126,10 @@ ru: true
 ruSubnet: 192.168.235.0/24
 ruPodIp: 192.168.235.240
 
-# CSI Logger configuration
-csi_logger_enabled: true
-csi_logger_period_slots: 1
-csi_logger_all_subcarriers: true  # NEW: log all subcarriers (false = 1 per PRB)
+# CSI logger (ocudu-csi-logging, CSI CSV format v3.1). Needs periodic SRS: gnbConfig.cell_cfg.srs.
+csi:
+  enabled: true
+  hostPath: /data/csi            # directory on the RAN node; file csi_per_rb.csv, truncated at gNB start
+  flushCore: ""                  # CPU of the CSV writer thread (a housekeeping core); "" = not pinned
+  granularity: rb                # rb | subcarrier (one row per SRS pilot, no interpolation)
+  subcarrierSampling: 1          # subcarrier granularity only: keep 1 pilot out of N in each RB

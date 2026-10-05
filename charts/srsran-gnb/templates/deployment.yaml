@@ -60,16 +60,34 @@ spec:
               CONFIG_FILE="/srsran/config/srsran-gnb.yaml"
               {{- end }}
               {{- if .Values.start.gnb }}
-              /usr/local/bin/gnb -c $CONFIG_FILE{{- if .Values.csi_logger_enabled }} --csi-logger-enabled --csi-logger-period-slots={{ .Values.csi_logger_period_slots }}{{- if .Values.csi_logger_all_subcarriers }} --csi-logger-all-subcarriers{{- end }}{{- end }}
+              /usr/local/bin/gnb -c $CONFIG_FILE
               {{- else }}
               sleep infinity
               {{- end }}
+          {{- if and .Values.csi .Values.csi.enabled }}
+          # CSI logger of the image (ocudu-csi-logging), read at gNB start
+          env:
+            - name: CSI_ENABLED
+              value: "true"
+            - name: CSI_OUTPUT_DIR
+              value: /data/csi
+            - name: CSI_GRANULARITY
+              value: {{ .Values.csi.granularity | default "rb" | quote }}
+            - name: CSI_SUBCARRIER_SAMPLING
+              value: {{ .Values.csi.subcarrierSampling | default 1 | quote }}
+            {{- if .Values.csi.flushCore }}
+            - name: CSI_FLUSH_CORE
+              value: {{ .Values.csi.flushCore | quote }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.gnbConfig.remote_control.port }}
               protocol: TCP
           securityContext:
             privileged: true
+            # OCUDU dpdk/uhd images run as uid 1001: run as root as with the srsRAN images (ip route, hostPath writes)
+            runAsUser: 0
             capabilities:
               add: ["NET_ADMIN", "SYS_NICE", "IPC_LOCK"]
           lifecycle:
@@ -104,6 +122,10 @@ spec:
               name: varlog
             - mountPath: /mnt/
               name: host-mount
+            {{- if and .Values.csi .Values.csi.enabled }}
+            - mountPath: /data/csi
+              name: csi-data
+            {{- end }}
             {{- if $sriovEnabled }}
             - mountPath: /dev/hugepages
               name: hugepages
@@ -138,6 +160,12 @@ spec:
           hostPath:
             path: /mnt/
             type: Directory
+        {{- if and .Values.csi .Values.csi.enabled }}
+        - name: csi-data
+          hostPath:
+            path: {{ .Values.csi.hostPath | default "/data/csi" }}
+            type: DirectoryOrCreate
+        {{- end }}
         {{- if $sriovEnabled }}
         - name: hugepages
           emptyDir:
