@@ -48,8 +48,8 @@ gnbConfig:
     rx_gain: 0                       # OCUDU ZMQ: must be <= 0 dB (attenuation), 75 is refused
 
   cell_cfg:
-    srs:                              # periodic SRS, required by the CSI logger
-      type_enabled: periodic
+    srs:                              # disabled: srsUE sends no SRS, and with SRS configured its PUCCH F2 is not decoded (RLF)
+      type_enabled: disabled          # set to periodic (and csi.enabled: true) only with UEs that transmit SRS
       period_ms: 20
     dl_arfcn: 368500                  # ARFCN of the downlink carrier (center frequency).
     band: 3                           # The NR band.
@@ -115,7 +115,7 @@ usrp: false
 
 # CSI logger (ocudu-csi-logging, CSI CSV format v3.1). Needs periodic SRS: gnbConfig.cell_cfg.srs.
 csi:
-  enabled: true
+  enabled: false                 # no SRS from srsUE in rfsim: nothing to log
   hostPath: /data/csi            # directory on the RAN node; file csi_per_rb.csv, truncated at gNB start
   flushCore: ""                  # CPU of the CSV writer thread (a housekeeping core); "" = not pinned
   granularity: rb                # rb | subcarrier (one row per SRS pilot, no interpolation)
