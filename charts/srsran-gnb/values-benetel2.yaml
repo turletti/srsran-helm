@@ -102,9 +102,12 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     pucch:
-      p0_nominal: -60
+      p0_nominal: -90 # OCUDU default (was -60: +30 dB, UL saturation near the RU)
+      enable_cl_loop_pw_control: true # to avoid saturated PUCCH
     pusch:
-      p0_nominal_with_grant: -60
+      p0_nominal_with_grant: -76 # OCUDU default (was -60)
+      enable_cl_loop_pw_control: true # to avoid saturated PUCCH
+      target_sinr: 10
     ssb:
       ssb_block_power_dbm: -3 # was -11
     tdd_ul_dl_cfg:
