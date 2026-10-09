@@ -11,6 +11,10 @@ spec:
     matchLabels:
       {{- include "srsran-gnb.selectorLabels" . | nindent 6 }}
   replicas: 1
+  strategy:
+    # The gNB holds an SR-IOV VF and hugepages: stop the old pod before starting the new one (a rolling update
+    # creates the new pod first, which then fails with UnexpectedAdmissionError).
+    type: Recreate
   template:
     metadata:
       labels:
@@ -97,11 +101,13 @@ spec:
           {{- if $sriovEnabled }}
           resources:
             requests:
-              memory: "4Gi"
+              memory: {{ $sriov.gnbMemory | default "8Gi" | quote }}
               hugepages-1Gi: "2Gi"
               openshift.io/{{ $sriov.sriovResourceName }}: "1"
             limits:
-              memory: "4Gi"
+              # OCUDU release_26_10, 100 MHz 4T2R: ~3.3 GiB steady state; 4Gi left no room for the page cache of the
+              # CSI file (kept at the limit by reclaim)
+              memory: {{ $sriov.gnbMemory | default "8Gi" | quote }}
               hugepages-1Gi: "2Gi"
               openshift.io/{{ $sriov.sriovResourceName }}: "1"
           {{- else }}

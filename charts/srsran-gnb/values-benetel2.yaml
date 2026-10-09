@@ -87,7 +87,7 @@ gnbConfig:
   cell_cfg:
     srs:                              # periodic SRS, required by the CSI logger
       type_enabled: periodic
-      period_ms: 20
+      period_ms: 40                   # 40 ms: ~8-12 GB/h of CSI with 3 UEs, 2 SRS ports, 2 RX (20 ms doubles it)
     dl_arfcn: 637212
     band: 78
     channel_bandwidth_MHz: 100
@@ -102,14 +102,16 @@ gnbConfig:
       prach_root_sequence_index: 1
       zero_correlation_zone: 0
     pucch:
-      p0_nominal: -90 # OCUDU default (was -60: +30 dB, UL saturation near the RU)
-      enable_cl_loop_pw_control: true # to avoid saturated PUCCH
+      p0_nominal: -90                 # OCUDU default (was -60: +30 dB, UL saturation near the RU)
+      enable_cl_loop_pw_control: true # closed-loop power control: lowers the power of UEs near the RU
     pusch:
-      p0_nominal_with_grant: -76 # OCUDU default (was -60)
-      enable_cl_loop_pw_control: true # to avoid saturated PUCCH
-      target_sinr: 10
+      p0_nominal_with_grant: -76      # OCUDU default (was -60)
+      enable_cl_loop_pw_control: true
+      target_sinr: 15                 # dB; ~25 dB below the RU input saturation (rsrp 'ovl') measured on 2026-10-09
+      max_rank: 1                     # with 2-port SRS, OCUDU picks the UL rank from the SRS assuming a 30 dB SNR: 2 layers fail
     ssb:
-      ssb_block_power_dbm: -3 # was -11
+      ssb_block_power_dbm: -28        # signalled only (SIB1/RRC), not the DL power: sets the UE pathloss estimate and so the
+                                      # open-loop power of PRACH/msg3/PUCCH/PUSCH; was -3 (UL saturation near the RU)
     tdd_ul_dl_cfg:
       dl_ul_tx_period: 10
       nof_dl_slots: 7
@@ -156,6 +158,7 @@ sriov:
   pciAddress: ""
   sriovResourceName: "ruvfioc"
   vlan: 802
+  gnbMemory: 8Gi                 # memory request/limit of the gnb container (was 4Gi, hard-coded)
 
 # CSI logger (ocudu-csi-logging, CSI CSV format v3.1). Needs periodic SRS: gnbConfig.cell_cfg.srs.
 csi:

@@ -63,7 +63,7 @@ gnbConfig:
   cell_cfg:
     srs:                              # periodic SRS, required by the CSI logger
       type_enabled: periodic
-      period_ms: 20
+      period_ms: 40                   # 40 ms: ~8-12 GB/h of CSI with 3 UEs, 2 SRS ports, 2 RX (20 ms doubles it)
     dl_arfcn: 640000                  # ARFCN of the downlink carrier (center frequency).
     band: 78                          # The NR band.
     channel_bandwidth_MHz: 20         # Bandwith in MHz. Number of PRBs will be automatically derived.
@@ -82,8 +82,12 @@ gnbConfig:
       prach_config_index: 1           # Sets PRACH config to match what is expected by srsUE
     pdsch:
       mcs_table: qam64                # Sets PDSCH MCS to 64 QAM
+    pucch:
+      enable_cl_loop_pw_control: true # closed-loop power control: UL saturation observed with UEs near the antenna
     pusch:
       mcs_table: qam64                # Sets PUSCH MCS to 64 QAM
+      enable_cl_loop_pw_control: true # open loop only by default: no TPC lowers the power of a UE near the antenna
+      target_sinr: 15                 # dB, as on the Benetel (P0 at the OCUDU defaults -76/-90)
     slicing:
       - sst: 1
       - sst: 1

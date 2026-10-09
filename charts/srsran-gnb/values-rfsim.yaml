@@ -50,7 +50,7 @@ gnbConfig:
   cell_cfg:
     srs:                              # disabled: srsUE sends no SRS, and with SRS configured its PUCCH F2 is not decoded (RLF)
       type_enabled: disabled          # set to periodic (and csi.enabled: true) only with UEs that transmit SRS
-      period_ms: 20
+      period_ms: 40
     dl_arfcn: 368500                  # ARFCN of the downlink carrier (center frequency).
     band: 3                           # The NR band.
     channel_bandwidth_MHz: 20         # Bandwith in MHz. Number of PRBs will be automatically derived.
