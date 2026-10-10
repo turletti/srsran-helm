@@ -88,6 +88,8 @@ gnbConfig:
       mcs_table: qam64                # Sets PUSCH MCS to 64 QAM
       enable_cl_loop_pw_control: true # open loop only by default: no TPC lowers the power of a UE near the antenna
       target_sinr: 15                 # dB, as on the Benetel (P0 at the OCUDU defaults -76/-90)
+    ssb:
+      ssb_block_power_dbm: -40        # signalled only (SIB1): UE open-loop power; default -16 brought a UE at max power to -5 dB
     slicing:
       - sst: 1
       - sst: 1
