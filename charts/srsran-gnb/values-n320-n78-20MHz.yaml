@@ -56,9 +56,12 @@ gnbConfig:
     device_args: addr=192.168.235.105,addr_mgmt=192.168.235.105,type=n3xx,name=ni-n3xx-31B3A77,product=n320,num_recv_frames=32,num_send_frames=32,recv_frame_size=8000,send_frame_size=8000,master_clock_rate=245.76e6
     srate: 61.44                      # RF sample rate might need to be adjusted according to selected bandwidth.
     clock: internal
-    sync: internal                        
-    tx_gain: 55                       # N320: CQI 3-4 at 35, 9 at 45, 13-15 at 55
-    rx_gain: 40                       # N320: at 60, UEs arrived at -2..-8 dBFS (near saturation); at 40, -25 dBFS at access, SINR 15 at -32 dBFS
+    sync: internal
+    tx_gain: 60                       # N320 at max: needed for the far qhat02 (CQI 3-4 at 35 for a near UE)
+    rx_gain: 50                       # N320: 60 saturated near UEs at access, 40 cost ~10 dB SNR for the far qhat02
+    amplitude_control:
+      tx_gain_backoff: 6              # default 12: +6 dB DL so that qhat02 detects the SSB reliably
+      enable_clipping: true
 
   cell_cfg:
     srs:                              # periodic SRS, required by the CSI logger
@@ -80,6 +83,7 @@ gnbConfig:
         dci_format_0_1_and_1_1: false # Set correct DCI format (fallback)
     prach:
       prach_config_index: 1           # Sets PRACH config to match what is expected by srsUE
+      preamble_trans_max: 20          # PRACH power ramping for far UEs
     pdsch:
       mcs_table: qam64                # Sets PDSCH MCS to 64 QAM
     pucch:
