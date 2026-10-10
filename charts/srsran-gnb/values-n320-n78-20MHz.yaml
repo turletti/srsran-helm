@@ -57,8 +57,8 @@ gnbConfig:
     srate: 61.44                      # RF sample rate might need to be adjusted according to selected bandwidth.
     clock: internal
     sync: internal                        
-    tx_gain: 35                       # Transmit gain of the RF might need to adjusted to the given situation.
-    rx_gain: 60                       # Receive gain of the RF might need to adjusted to the given situation.
+    tx_gain: 55                       # N320: CQI 3-4 at 35, 9 at 45, 13-15 at 55
+    rx_gain: 40                       # N320: at 60, UEs arrived at -2..-8 dBFS (near saturation); at 40, -25 dBFS at access, SINR 15 at -32 dBFS
 
   cell_cfg:
     srs:                              # periodic SRS, required by the CSI logger
