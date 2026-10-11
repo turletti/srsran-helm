@@ -57,7 +57,7 @@ gnbConfig:
     srate: 61.44                      # RF sample rate might need to be adjusted according to selected bandwidth.
     clock: internal
     sync: internal                        
-    tx_gain: 35                       # Transmit gain of the RF might need to adjusted to the given situation.
+    tx_gain: 45                       # Transmit gain of the RF might need to adjusted to the given situation.
     rx_gain: 60                       # Receive gain of the RF might need to adjusted to the given situation.
 
   cell_cfg:
@@ -80,6 +80,7 @@ gnbConfig:
         dci_format_0_1_and_1_1: false # Set correct DCI format (fallback)
     prach:
       prach_config_index: 1           # Sets PRACH config to match what is expected by srsUE
+      preamble_trans_max: 20          # PRACH power ramping up to 19 x 4 dB (default 7: 24 dB) for far UEs
     pdsch:
       mcs_table: qam64                # Sets PDSCH MCS to 64 QAM
     pucch:
@@ -89,7 +90,7 @@ gnbConfig:
       enable_cl_loop_pw_control: true # open loop only by default: no TPC lowers the power of a UE near the antenna
       target_sinr: 15                 # dB, as on the Benetel (P0 at the OCUDU defaults -76/-90)
     ssb:
-      ssb_block_power_dbm: -40        # signalled only (SIB1): UE open-loop power; default -16 brought a UE at max power to -5 dB
+      ssb_block_power_dbm: -30        # raised with tx_gain (+10 dB) to keep the UE open-loop UL power unchanged
     slicing:
       - sst: 1
       - sst: 1
